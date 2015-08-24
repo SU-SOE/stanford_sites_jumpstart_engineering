@@ -16,6 +16,7 @@ base = stanford_sites_jumpstart_academic
 
 dependencies[] = always_visible
 dependencies[] = menu_attributes
+dependencies[] = content_access
 dependencies[] = stanford_jumpstart_engineering
 
 # Prohibit prior dependencies
