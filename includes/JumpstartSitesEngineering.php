@@ -32,65 +32,51 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     //   'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     // );
 
+    $tasks['jse_install_content'] = array(
+      'display_name' => st('Install JSE specific content'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'install_content',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $this->prepare_tasks($tasks, get_class());
     return array_merge($parent_tasks, $tasks);
   }
 
-  /**
-   * Implements hook_form_alter()
-   * Modifies and alters the configuration form.
-   *
-   * @return array the form array
-   */
-  public function get_config_form(&$form, &$form_state) {
-
-    // Get parent altered configuration first.
-    $my_form = parent::get_config_form($form, $form_state);
-
-    // $my_form['jumpstart_academic'] = array(
-    //   '#type' => 'fieldset',
-    //   '#title' => 'Jumpstart Academic Configuration',
-    //   '#description' => 'Jumpstart Sites Academic Configuration Options',
-    //   '#collapsible' => TRUE,
-    //   '#collapsed' => FALSE,
-    // );
-
-    // $my_form['jumpstart_academic']['deploy_password'] = array(
-    //   '#type' => 'textfield',
-    //   '#title' => 'Content Deployment Password',
-    //   '#description' => 'Stanford Sites Environment Only: Please enter the password for the content deployment.',
-    //   '#default_value' => isset($form_state['values']['deploy_password']) ? $form_state['values']['deploy_password'] : '',
-    // );
-
-    // $my_form['jumpstart_academic']['fetch_endpoint'] = array(
-    //   '#type' => 'textfield',
-    //   '#title' => 'Content Endpoint',
-    //   '#description' => 'Expert Only: If you are installing outside of the stanford sites environment the installation will attempt to fetch content from a remote server. To change the location of that remote server edit this field. Otherwise, leave this alone.',
-    //   '#default_value' => isset($form_state['values']['fetch_endpoint']) ? $form_state['values']['fetch_endpoint'] : 'https://sites.stanford.edu/jsa-content/jsainstall',
-    // );
-
-    return $my_form;
-  }
-
-  /**
-   * [get_config_form_submit description].
-   *
-   * @param [type] $form
-   *   [description]
-   * @param [type] $form_state
-   *   [description]
-   *
-   * @return [type]             [description]
-   */
-  public function get_config_form_submit($form, &$form_state) {
-    parent::get_config_form_submit($form, $form_state);
-    // $vars = variable_get('stanford_jumpstart_install', array());
-    // $vars['fetch_endpoint'] = check_plain($form['jumpstart_academic']['fetch_endpoint']['#value']);
-    // variable_set('stanford_jumpstart_install', $vars);
-  }
-
   // Install tasks below.
   // //////////////////////////////////////////////////////////////////////////
+
+  /**
+   * [install_content description]
+   * @param  [type] &$install_state [description]
+   * @return [type]                 [description]
+   */
+  public function install_content(&$install_state) {
+
+    $time = time();
+    drush_log('JSE - Starting Content Import. Time: ' . $time, 'ok');
+
+    $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
+
+    // Load up library.
+    $this->load_sites_content_importer_files($install_state);
+
+    $filters = array('sites_products' => array('55'));
+    $view_importer = new SitesContentImporterViews();
+    $view_importer->set_endpoint($endpoint);
+    $view_importer->set_resource('content');
+    $view_importer->set_filters($filters);
+    $view_importer->import_content_by_views_and_filters();
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds' , 'ok');
+
+  }
+
+
+
+
 
 
 }
