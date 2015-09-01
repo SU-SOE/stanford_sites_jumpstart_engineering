@@ -156,28 +156,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       $items[$k] = $v;
     }
 
-/* Not sure if Private Pages needs this
-    // The home link weight needs to change.
-    $home_search = db_select('menu_links', 'ml')
-      ->fields('ml', array('mlid'))
-      ->condition('menu_name', 'menu-menu-private-pages')
-      ->condition('link_path', 'private')
-      ->condition('link_title', 'Private')
-      ->execute()
-      ->fetchAssoc();
-
-    if (is_numeric($home_search['mlid'])) {
-      $menu_link = menu_link_load($home_search['mlid']);
-      $menu_link['weight'] = -50;
-      menu_link_save($menu_link);
-    }
-  */
     $time_diff = time() - $time;
-    drush_log('JSE - Finished creating menu items: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished creating Private Pages menu items: ' . $time_diff . ' seconds' , 'ok');
   }
-
-
-
-
-
-  }
+ }
