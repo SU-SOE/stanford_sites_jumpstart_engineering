@@ -40,6 +40,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_install_pps_menu_items'] = array(
+      'display_name' => st('Install private pages section menu items.'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'install_private_pages_section_menu_items',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $this->prepare_tasks($tasks, get_class());
     return array_merge($parent_tasks, $tasks);
   }
@@ -80,6 +88,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
    */
 
   public function install_private_pages_section_menu_items(&$install_state) {
+    $time = time();
     drush_log('JSE - starting create Private Pages menu items', 'ok');
     $items = array();
 
@@ -146,7 +155,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       $v['mlid'] = $mlid;
       $items[$k] = $v;
     }
-    drush_log('JSE - Finished create menu items', 'ok');
 
 /* Not sure if Private Pages needs this
     // The home link weight needs to change.
@@ -164,7 +172,8 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       menu_link_save($menu_link);
     }
   */
-    drush_log('JSE - Finished updating menu wieghts', 'ok');
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished creating menu items: ' . $time_diff . ' seconds' , 'ok');
   }
 
 
