@@ -74,9 +74,101 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
   }
 
+  /**
+   * Installs and configures the Private Pages Section menu for JSE
+   * @param  [type] $install_state [description]
+   */
+
+  public function install_private_pages_section_menu_items(&$install_state) {
+    drush_log('JSE - starting create Private Pages menu items', 'ok');
+    $items = array();
+
+    // Rebuild the menu cache before starting this.
+    drupal_static_reset();
+    menu_cache_clear_all();
+    menu_rebuild();
+
+    // Private pages section landing page
+    $items['private-pages'] = array(
+      'link_path' => drupal_get_normal_path('private'),
+      'link_title' => 'Private Pages',
+      'menu_name' => 'menu-menu-private-pages',
+      'weight' => -9,
+    );
+
+    // For Faculty
+    $items['private/for-faculty'] = array(
+      'link_path' => drupal_get_normal_path('private/for-faculty'),
+      'link_title' => 'For Faculty',
+      'menu_name' => 'menu-menu-private-pages',
+      'weight' => -7,
+      'parent' => 'private', // must be already saved.
+    );
+
+    // For Students
+    $items['private/for-students'] = array(
+      'link_path' => drupal_get_normal_path('private/for-students'),
+      'link_title' => 'For Students',
+      'menu_name' => 'menu-menu-private-pages',
+      'weight' => -5,
+      'parent' => 'private', // must be already saved.
+    );
+
+    // For Staff
+    $items['private/for-staff'] = array(
+      'link_path' => drupal_get_normal_path('private/for-staff'),
+      'link_title' => 'For Staff',
+      'menu_name' => 'menu-menu-private-pages',
+      'weight' => -3,
+      'parent' => 'private', // must be already saved.
+    );
+
+      // For Faculty / Sub-page
+    $items['private/for-faculty/sub-page'] = array(
+      'link_path' => drupal_get_normal_path('private/for-faculty/sub-page'),
+      'link_title' => 'Faculty Sub-Page',
+      'menu_name' => 'main-menu',
+      'weight' => -9,
+      'parent' => 'private/for-faculty', // must be already saved.
+    );
+
+    // Loop through each of the items and save them.
+    foreach ($items as $k => $v) {
+
+      // Check to see if there is a parent declaration. If there is then find
+      // the mlid of the parent item and attach it to the menu item being saved.
+      if (isset($v['parent'])) {
+        $v['plid'] = $items[$v['parent']]['mlid'];
+        unset($v['parent']); // Remove fluff before save.
+      }
+      // Save the menu item.
+      $mlid = menu_link_save($v);
+      $v['mlid'] = $mlid;
+      $items[$k] = $v;
+    }
+    drush_log('JSE - Finished create menu items', 'ok');
+
+/* Not sure if Private Pages needs this
+    // The home link weight needs to change.
+    $home_search = db_select('menu_links', 'ml')
+      ->fields('ml', array('mlid'))
+      ->condition('menu_name', 'menu-menu-private-pages')
+      ->condition('link_path', 'private')
+      ->condition('link_title', 'Private')
+      ->execute()
+      ->fetchAssoc();
+
+    if (is_numeric($home_search['mlid'])) {
+      $menu_link = menu_link_load($home_search['mlid']);
+      $menu_link['weight'] = -50;
+      menu_link_save($menu_link);
+    }
+  */
+    drush_log('JSE - Finished updating menu wieghts', 'ok');
+  }
 
 
 
 
 
-}
+  }
