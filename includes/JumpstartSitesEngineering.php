@@ -224,23 +224,51 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     variable_set('stanford_jumpstart_home_active', $default);
     variable_set('context_status', $context_status);
 
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds' , 'ok');
+  }
 
+  /**
+   * Configure the beans used by the JSE layouts.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function configure_jse_content_beans(&$install_state) {
+    $time = time();
+    drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
 
-    // Install contextual block classes for home pages
+    // Block clases.
+    $fields = array('module', 'delta', 'css_class');
+    $values = array(
+      array("bean","jumpstart-home-page-about","well"),
+    );
+
+    // Key all the values.
+    $insert = db_insert('block_class')->fields($fields);
+    foreach ($values as $k => $value) {
+      $db_values = array_combine($fields, $value);
+      $insert->values($db_values);
+    }
+    $insert->execute();
+
+    // Install contextual block classes for home pages.
     $cbc_layouts = array();
 
-    $cbc_layouts['stanford_jumpstart_home_morris']['bean-jumpstart-lead-text-with-body'][] = 'span4';
+    $cbc_layouts['stanford_jumpstart_home_morris']['bean-homepage-about-block'][] = 'span4';
 
     variable_set('contextual_block_class', $cbc_layouts);
 
     $time_diff = time() - $time;
     drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds' , 'ok');
   }
+
   /**
    * [fetch_jse_content_beans description]
    * @param  [type] $endpoint [description]
    * @return [type]           [description]
    */
+
+
   private function fetch_jse_content_beans($endpoint) {
 
     $uuids = array(
