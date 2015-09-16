@@ -27,7 +27,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Remove some parent tasks.
     // JSE adds content to the site that is different from JSA. Lets
     // disable those modules and add in only the ones we want again.
-    unset($parent_tasks['stanford_sites_jumpstart_academic_configure_homepage']);
+   // unset($parent_tasks['stanford_sites_jumpstart_academic_configure_homepage']);
 
 
     // $tasks['stanford_sites_jumpstart_academic_delete_views'] = array(
@@ -55,11 +55,11 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
-    $tasks['jse_configure_homepage_layouts'] = array(
+    $tasks['jse_configure_pical_homepage_layouts'] = array(
       'display_name' => st('Configure layouts for homepages'),
       'display' => FALSE,
       'type' => 'normal',
-      'function' => 'configure_homepage_layouts',
+      'function' => 'configure_pical_homepage_layouts',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
@@ -91,6 +91,9 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $view_importer->set_resource('content');
     $view_importer->set_filters($filters);
     $view_importer->import_content_by_views_and_filters();
+
+    $this->fetch_jse_content_beans($endpoint);
+    drush_log('JSE - Finished importing beans.', 'ok');
 
     $time_diff = time() - $time;
     drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds' , 'ok');
@@ -179,16 +182,51 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
    * @param  [type] $install_state [description]
    * @return [type]                [description]
    */
-  public function configure_homepage_layouts (&$install_state) {
+  public function configure_pical_homepage_layouts (&$install_state) {
     $time = time();
-    drush_log('JSE - Configuring homepage layouts.' . $time, 'ok');
+    drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
 
-    parent::configure_homepage_layouts($install_state);
+
+    $default = 'stanford_jumpstart_home_morris';
+    variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-morris');
+
+    $context_status = variable_get('context_status', array());
+    $homecontexts = stanford_jumpstart_home_context_default_contexts();
+
+    $names = array_keys($homecontexts);
 
     // Enable these for site owners
+    $enabled['stanford_jumpstart_home_hoover'] = 1;
     $enabled['stanford_jumpstart_home_morris'] = 1;
+    $enabled['stanford_jumpstart_home_terman'] = 1;
+    $enabled['stanford_jumpstart_home_petit'] = 1;
 
-    // Install contextual block class for Panama layout
+    // Todo: remove these JSA
+    $enabled['stanford_jumpstart_home_lomita'] = 1;
+    $enabled['stanford_jumpstart_home_mayfield_news_events'] = 1;
+    $enabled['stanford_jumpstart_home_palm_news_events'] = 1;
+    $enabled['stanford_jumpstart_home_panama_news_events'] = 1;
+    $enabled['stanford_jumpstart_home_serra_news_events'] = 1;
+
+    unset($context_status['']);
+
+    foreach ($names as $context_name) {
+      $context_status[$context_name] = TRUE;
+      $settings = variable_get('sjh_' . $context_name, array());
+      $settings['site_admin'] = isset($enabled[$context_name]);
+      variable_set('sjh_' . $context_name, $settings);
+    }
+
+    $context_status[$default] = FALSE;
+    unset($context_status['']);
+
+    // Save settings
+    variable_set('stanford_jumpstart_home_active', $default);
+    variable_set('context_status', $context_status);
+
+
+
+    // Install contextual block classes for home pages
     $cbc_layouts = array();
 
     $cbc_layouts['stanford_jumpstart_home_morris']['bean-jumpstart-lead-text-with-body'][] = 'span4';
@@ -196,6 +234,25 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     variable_set('contextual_block_class', $cbc_layouts);
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished configuring homepage layouts: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds' , 'ok');
   }
+  /**
+   * [fetch_jse_content_beans description]
+   * @param  [type] $endpoint [description]
+   * @return [type]           [description]
+   */
+  private function fetch_jse_content_beans($endpoint) {
+
+    $uuids = array(
+      '40cabca1-7d44-42bf-a012-db53fdccd350', // Jumpstart Large Custom Block.
+      '7e510af6-c003-402d-91a4-7480dac1484a', // Jumpstart Small Custom Block.
+    );
+
+    $importer = new SitesContentImporter();
+    $importer->set_endpoint($endpoint);
+    $importer->set_bean_uuids($uuids);
+    $importer->import_content_beans();
+
+  }
+
 }
