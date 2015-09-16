@@ -24,6 +24,12 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Get parent tasks.
     $parent_tasks = parent::get_install_tasks($install_state);
 
+    // Remove some parent tasks.
+    // JSE adds content to the site that is different from JSA. Lets
+    // disable those modules and add in only the ones we want again.
+    unset($parent_tasks['stanford_sites_jumpstart_academic_configure_homepage']);
+
+
     // $tasks['stanford_sites_jumpstart_academic_delete_views'] = array(
     //   'display_name' => st('Delete default views from DB'),
     //   'display' => FALSE,
@@ -31,6 +37,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     //   'function' => 'remove_all_default_views_from_db',
     //   'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     // );
+
 
     $tasks['jse_install_content'] = array(
       'display_name' => st('Install JSE specific content'),
@@ -45,6 +52,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'display' => FALSE,
       'type' => 'normal',
       'function' => 'install_private_pages_section_menu_items',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
+    $tasks['jse_configure_homepage_layouts'] = array(
+      'display_name' => st('Configure layouts for homepages'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'configure_homepage_layouts',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
@@ -159,4 +174,28 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time_diff = time() - $time;
     drush_log('JSE - Finished creating Private Pages menu items: ' . $time_diff . ' seconds' , 'ok');
   }
- }
+  /**
+   * Enable a number of the home page layouts and set one to default on.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function configure_homepage_layouts (&$install_state) {
+    $time = time();
+    drush_log('JSE - Configuring homepage layouts.' . $time, 'ok');
+
+    parent::configure_homepage_layouts($install_state);
+
+    // Enable these for site owners
+    $enabled['stanford_jumpstart_home_morris'] = 1;
+
+    // Install contextual block class for Panama layout
+    $cbc_layouts = array();
+
+    $cbc_layouts['stanford_jumpstart_home_morris']['bean-jumpstart-lead-text-with-body'][] = 'span4';
+
+    variable_set('contextual_block_class', $cbc_layouts);
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished configuring homepage layouts: ' . $time_diff . ' seconds' , 'ok');
+  }
+}
