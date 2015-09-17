@@ -63,6 +63,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_configure_jse_beans'] = array(
+      'display_name' => st('Configure Beans'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'configure_jse_beans',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $this->prepare_tasks($tasks, get_class());
     return array_merge($parent_tasks, $tasks);
   }
@@ -233,14 +241,15 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
    * @param  [type] $install_state [description]
    * @return [type]                [description]
    */
-  public function configure_jse_content_beans(&$install_state) {
+  public function configure_jse_beans(&$install_state) {
     $time = time();
-    drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
+    drush_log('JSE - Configuring Beans.' . $time, 'ok');
 
-    // Block clases.
+    // Default block classes.
     $fields = array('module', 'delta', 'css_class');
     $values = array(
-      array("bean","jumpstart-home-page-about","well"),
+      array("bean","jumpstart-small-custom-block","span4 well"),
+      array("bean","jumpstart-large-custom-block","span8 well"),
     );
 
     // Key all the values.
@@ -251,15 +260,17 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     }
     $insert->execute();
 
-    // Install contextual block classes for home pages.
+    // Install contextual block classes.
     $cbc_layouts = array();
 
-    $cbc_layouts['stanford_jumpstart_home_morris']['bean-homepage-about-block'][] = 'span4';
+    $cbc_layouts['stanford_jumpstart_home_morris']['bean-homepage-about-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_morris']['bean-jumpstart-small-custom-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_morris']['bean-jumpstart-large-custom-block'][] = 'span8 well';
 
     variable_set('contextual_block_class', $cbc_layouts);
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished configuring Beans: ' . $time_diff . ' seconds' , 'ok');
   }
 
   /**
