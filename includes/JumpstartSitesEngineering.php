@@ -194,7 +194,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time = time();
     drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
 
-
     $default = 'stanford_jumpstart_home_morris';
     variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-morris');
 
@@ -206,15 +205,15 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Enable these JSE layouts for use by site owners
     $enabled['stanford_jumpstart_home_hoover'] = 1;
     $enabled['stanford_jumpstart_home_morris'] = 1;
-    $enabled['stanford_jumpstart_home_terman'] = 1;
-    $enabled['stanford_jumpstart_home_pettit'] = 1;
+    unset($enabled['stanford_jumpstart_home_terman']);
+    unset($enabled['stanford_jumpstart_home_pettit']);
 
     // Disable these layouts
-    $enabled['stanford_jumpstart_home_lomita'] = 0;
-    $enabled['stanford_jumpstart_home_mayfield_news_events'] = 0;
-    $enabled['stanford_jumpstart_home_palm_news_events'] = 0;
-    $enabled['stanford_jumpstart_home_panama_news_events'] = 0;
-    $enabled['stanford_jumpstart_home_serra_news_events'] = 0;
+     unset($enabled['stanford_jumpstart_home_lomita']);
+     unset($enabled['stanford_jumpstart_home_mayfield_news_events']);
+     unset($enabled['stanford_jumpstart_home_palm_news_events']);
+     unset($enabled['stanford_jumpstart_home_panama_news_events']);
+     unset($enabled['stanford_jumpstart_home_serra_news_events']);
 
     unset($context_status['']);
 
@@ -248,8 +247,8 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Install default JSE block classes.
     $fields = array('module', 'delta', 'css_class');
     $values = array(
-      array("bean","jumpstart-small-custom-block","well"),
-      array("bean","jumpstart-large-custom-block","well"),
+      array("bean","jumpstart-small-custom-block", "well"),
+      array("bean","jumpstart-large-custom-block", "well"),
     );
 
     // Key all the values.
@@ -297,8 +296,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
    * @param  [type] $endpoint [description]
    * @return [type]           [description]
    */
-
-
   private function fetch_jse_content_beans($endpoint) {
 
     $uuids = array(
