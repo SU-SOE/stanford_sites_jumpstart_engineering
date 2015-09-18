@@ -88,23 +88,30 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time = time();
     drush_log('JSE - Starting Content Import. Time: ' . $time, 'ok');
 
-    $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
+    if (lock_acquire('jumpstart_sites_engineering_install_content')){
 
-    // Load up library.
-    $this->load_sites_content_importer_files($install_state);
+      $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
 
-    $filters = array('sites_products' => array('55'));
-    $view_importer = new SitesContentImporterViews();
-    $view_importer->set_endpoint($endpoint);
-    $view_importer->set_resource('content');
-    $view_importer->set_filters($filters);
-    $view_importer->import_content_by_views_and_filters();
+      // Load up library.
+      $this->load_sites_content_importer_files($install_state);
 
-    $this->fetch_jse_content_beans($endpoint);
-    drush_log('JSE - Finished importing beans.', 'ok');
+      $filters = array('sites_products' => array('55'));
+      $view_importer = new SitesContentImporterViews();
+      $view_importer->set_endpoint($endpoint);
+      $view_importer->set_resource('content');
+      $view_importer->set_filters($filters);
+      $view_importer->import_content_by_views_and_filters();
 
-    $time_diff = time() - $time;
-    drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds' , 'ok');
+      $this->fetch_jse_content_beans($endpoint);
+      drush_log('JSE - Finished importing beans.', 'ok');
+
+      lock_release('jumpstart_sites_engineering_install_content');
+      $time_diff = time() - $time;
+      drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds' , 'ok');
+    }
+    else {
+      drush_log('JSE - Lock not acquired; no content imported' , 'error');
+    }
 
   }
 
