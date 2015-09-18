@@ -282,9 +282,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $cbc_layouts['stanford_jumpstart_home_terman']['views-f73ff55b085ea49217d347de6630cd5a'][] = 'span4 well';
     $cbc_layouts['stanford_jumpstart_home_terman']['views-stanford_events_views-block'][] = 'span4 well';
 
-  // Todo Tried:
-    // $cbc_layouts['stanford_jumpstart_home_terman']['views-stanford_events_views-block'][] = 'span4 well';
-    // $cbc_layouts['stanford_jumpstart_home_morris']['block-views-stanford-events-views-block'][] = 'span4 well';
     variable_set('contextual_block_class', $cbc_layouts);
 
     $time_diff = time() - $time;
