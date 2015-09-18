@@ -195,15 +195,15 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
 
 
-    //$default = 'stanford_jumpstart_home_morris';
-    //variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-morris');
+    $default = 'stanford_jumpstart_home_morris';
+    variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-morris');
 
     $context_status = variable_get('context_status', array());
     $homecontexts = stanford_jumpstart_home_context_default_contexts();
 
     $names = array_keys($homecontexts);
 
-    // Enable these for site owners
+    // Enable these for use by site owners
     $enabled['stanford_jumpstart_home_hoover'] = 1;
     $enabled['stanford_jumpstart_home_morris'] = 1;
     $enabled['stanford_jumpstart_home_terman'] = 1;
@@ -225,7 +225,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       variable_set('sjh_' . $context_name, $settings);
     }
 
-    $context_status[$default] = FALSE;
+   // $context_status[$default] = FALSE;
     unset($context_status['']);
 
     // Save settings
@@ -269,19 +269,19 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     $cbc_layouts['stanford_jumpstart_home_morris']['bean-homepage-about-block'][] = 'span4 well';
     $cbc_layouts['stanford_jumpstart_home_morris']['bean-jumpstart-small-custom-block'][] = 'span4 well';
-    $cbc_layouts['stanford_jumpstart_home_morris']['bean-stanford_news-block'][] = 'span4 well';
-    $cbc_layouts['stanford_jumpstart_home_morris']['bean-stanford_events_views-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_morris']['view-stanford_news-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_morris']['view-stanford_events_views-block'][] = 'span4 well';
 
     $cbc_layouts['stanford_jumpstart_home_petit']['bean-homepage-about-block'][] = 'span8 well';
     $cbc_layouts['stanford_jumpstart_home_petit']['bean-jumpstart-large-custom-block'][] = 'span8 well';
-    $cbc_layouts['stanford_jumpstart_home_petit']['bean-stanford_news-block'][] = 'span4 well';
-    $cbc_layouts['stanford_jumpstart_home_petit']['bean-stanford_events_views-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_petit']['view-stanford_news-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_petit']['view-stanford_events_views-block'][] = 'span4 well';
 
     $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-about-block'][] = 'span4 well';
     $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-large-custom-block'][] = 'span8 well';
     $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-small-custom-block'][] = 'span4 well';
-    $cbc_layouts['stanford_jumpstart_home_terman']['bean-stanford_news-block'][] = 'span4 well';
-    $cbc_layouts['stanford_jumpstart_home_terman']['bean-stanford_events_views-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_terman']['view-stanford_news-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_terman']['view-stanford_events_views-block'][] = 'span4 well';
 
     variable_set('contextual_block_class', $cbc_layouts);
 
