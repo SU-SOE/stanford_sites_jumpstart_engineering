@@ -197,7 +197,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
    * @param  [type] $install_state [description]
    * @return [type]                [description]
    */
-  public function configure_pical_homepage_layouts (&$install_state) {
+  public function configure_pical_homepage_layouts(&$install_state) {
     $time = time();
     drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
 
