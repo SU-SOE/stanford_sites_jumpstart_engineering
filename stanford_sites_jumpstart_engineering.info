@@ -31,6 +31,8 @@ dependencies[] = stanford_related_news
 dependencies[] = stanford_related_page
 dependencies[] = stanford_related_person
 dependencies[] = stanford_related_publication
+dependencies[] = stanford_capx
+dependencies[] = capx_auto_nodetitle
 
 # Prohibit prior dependencies
 ; ----------------
