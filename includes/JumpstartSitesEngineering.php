@@ -70,7 +70,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Load up library.
     $this->load_sites_content_importer_files($install_state);
 
-    $filters = array('sites_products' => array('55'));
+    $filters = array('tid_raw' => array('55'));
     $view_importer = new SitesContentImporterViews();
     $view_importer->set_endpoint($endpoint);
     $view_importer->set_resource('content');
