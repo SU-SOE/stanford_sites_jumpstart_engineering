@@ -92,15 +92,15 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
       $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
 
-      // Load up library.
-      $this->load_sites_content_importer_files($install_state);
-
-      $filters = array('sites_products' => array('55'));
+      $filters = array('tid_raw' => array('55'));
       $view_importer = new SitesContentImporterViews();
       $view_importer->set_endpoint($endpoint);
       $view_importer->set_resource('content');
       $view_importer->set_filters($filters);
       $view_importer->import_content_by_views_and_filters();
+    
+      // Load up library.
+      $this->load_sites_content_importer_files($install_state);
 
       $this->fetch_jse_content_beans($endpoint);
       drush_log('JSE - Finished importing beans.', 'ok');
