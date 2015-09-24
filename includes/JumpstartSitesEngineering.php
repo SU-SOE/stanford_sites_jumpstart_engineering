@@ -292,20 +292,24 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Install contextual block classes.
     $cbc_layouts = array();
 
+    $cbc_layouts['stanford_jumpstart_home_hoover']['bean-homepage-banner-image'][] = 'span8';
     $cbc_layouts['stanford_jumpstart_home_hoover']['bean-homepage-about-block'][] = 'span4 well';
     $cbc_layouts['stanford_jumpstart_home_hoover']['bean-jumpstart-small-custom-block'][] = 'span4';
     $cbc_layouts['stanford_jumpstart_home_hoover']['bean-jumpstart-large-custom-block'][] = 'span8 well';
 
+    $cbc_layouts['stanford_jumpstart_home_morris']['bean-homepage-banner-image'][] = 'span8';
     $cbc_layouts['stanford_jumpstart_home_morris']['bean-homepage-about-block'][] = 'span4 well';
     $cbc_layouts['stanford_jumpstart_home_morris']['bean-jumpstart-small-custom-block'][] = 'span4';
     $cbc_layouts['stanford_jumpstart_home_morris']['views-f73ff55b085ea49217d347de6630cd5a'][] = 'span4 well';
     $cbc_layouts['stanford_jumpstart_home_morris']['views-stanford_events_views-block'][] = 'span4 well';
 
+    $cbc_layouts['stanford_jumpstart_home_pettit']['bean-homepage-banner-image'][] = 'span12';
     $cbc_layouts['stanford_jumpstart_home_pettit']['bean-homepage-about-block'][] = 'span8 well';
     $cbc_layouts['stanford_jumpstart_home_pettit']['bean-jumpstart-large-custom-block'][] = 'span8';
     $cbc_layouts['stanford_jumpstart_home_pettit']['views-f73ff55b085ea49217d347de6630cd5a'][] = 'span4 well';
     $cbc_layouts['stanford_jumpstart_home_pettit']['views-stanford_events_views-block'][] = 'span4 well';
 
+    $cbc_layouts['stanford_jumpstart_home_terman']['bean-homepage-banner-image'][] = 'span12';
     $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-about-block'][] = 'span4 well';
     $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-large-custom-block'][] = 'span8';
     $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-small-custom-block'][] = 'span4';
@@ -315,7 +319,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $cbc_layouts['sitewide_jse']['bean-jse-logo-block'][] = 'span4';
     $cbc_layouts['sitewide_jse']['bean-jumpstart-footer-contact-block'][] = 'span2';
     $cbc_layouts['sitewide_jse']['bean-jumpstart-footer-social-media--0'][] = 'span2';
-    $cbc_layouts['sitewide_jse']['bean-jumpstart-custom-footer-block'][] = 'span2 well';
+    $cbc_layouts['sitewide_jse']['bean-jumpstart-custom-footer-block'][] = 'span2';
     $cbc_layouts['sitewide_jse']['stanford_private_page-stanford_internal_login'][] = 'span2';
 
     variable_set('contextual_block_class', $cbc_layouts);
@@ -332,6 +336,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
   private function fetch_jse_content_beans($endpoint) {
 
     $uuids = array(
+      'e813c236-7400-4f43-ad18-736617ceb28e', // Jumpstart Home Page Banner Image.
       '40cabca1-7d44-42bf-a012-db53fdccd350', // Jumpstart Large Custom Block.
       '7e510af6-c003-402d-91a4-7480dac1484a', // Jumpstart Small Custom Block.
       '2c570a0a-d52a-4e8b-bf36-ec01b2777932', // JSE Logo Block.
