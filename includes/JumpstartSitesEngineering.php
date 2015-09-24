@@ -305,6 +305,8 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $uuids = array(
       '40cabca1-7d44-42bf-a012-db53fdccd350', // Jumpstart Large Custom Block.
       '7e510af6-c003-402d-91a4-7480dac1484a', // Jumpstart Small Custom Block.
+      '2c570a0a-d52a-4e8b-bf36-ec01b2777932', // JSE Logo Block.
+      '87527e6a-1f9e-4b39-a999-c138851b3a47', // Jumpstart Custom Footer Block.
     );
 
     $importer = new SitesContentImporter();
@@ -315,3 +317,4 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
   }
 
 }
+
