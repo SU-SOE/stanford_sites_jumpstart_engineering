@@ -63,6 +63,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_configure_sitewide_layout'] = array(
+      'display_name' => st('Configure site-wide layout'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'configure_sitewide_layout',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $tasks['jse_configure_jse_beans'] = array(
       'display_name' => st('Configure Beans'),
       'display' => FALSE,
@@ -212,36 +220,34 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       // Enable these JSE layouts for use by site owners
       $enabled['stanford_jumpstart_home_hoover'] = 1;
       $enabled['stanford_jumpstart_home_morris'] = 1;
-      $enabled['sitewide_jse'] = 1;
       unset($enabled['stanford_jumpstart_home_terman']);
       unset($enabled['stanford_jumpstart_home_pettit']);
-      unset($enabled['sitewide_jsa']);
 
-    // Disable these layouts
-     unset($enabled['stanford_jumpstart_home_lomita']);
-     unset($enabled['stanford_jumpstart_home_mayfield_news_events']);
-     unset($enabled['stanford_jumpstart_home_palm_news_events']);
-     unset($enabled['stanford_jumpstart_home_panama_news_events']);
-     unset($enabled['stanford_jumpstart_home_serra_news_events']);
+      // Disable these layouts
+      unset($enabled['stanford_jumpstart_home_lomita']);
+      unset($enabled['stanford_jumpstart_home_mayfield_news_events']);
+      unset($enabled['stanford_jumpstart_home_palm_news_events']);
+      unset($enabled['stanford_jumpstart_home_panama_news_events']);
+      unset($enabled['stanford_jumpstart_home_serra_news_events']);
 
-    unset($context_status['']);
+      unset($context_status['']);
 
-    foreach ($names as $context_name) {
-      $context_status[$context_name] = TRUE;
-      $settings = variable_get('sjh_' . $context_name, array());
-      $settings['site_admin'] = isset($enabled[$context_name]);
-      variable_set('sjh_' . $context_name, $settings);
-    }
+      foreach ($names as $context_name) {
+        $context_status[$context_name] = TRUE;
+        $settings = variable_get('sjh_' . $context_name, array());
+        $settings['site_admin'] = isset($enabled[$context_name]);
+        variable_set('sjh_' . $context_name, $settings);
+      }
 
-    $context_status[$default] = FALSE;
-    unset($context_status['']);
+      $context_status[$default] = FALSE;
+      unset($context_status['']);
 
-    // Save settings
-    variable_set('stanford_jumpstart_home_active', $default);
-    variable_set('context_status', $context_status);
+      // Save settings
+      variable_set('stanford_jumpstart_home_active', $default);
+      variable_set('context_status', $context_status);
 
-    $time_diff = time() - $time;
-    drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds' , 'ok');
+      $time_diff = time() - $time;
+      drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds' , 'ok');
   }
 
   /**
