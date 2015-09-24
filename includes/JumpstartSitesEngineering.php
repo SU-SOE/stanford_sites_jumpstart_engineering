@@ -192,30 +192,30 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time_diff = time() - $time;
     drush_log('JSE - Finished creating Private Pages menu items: ' . $time_diff . ' seconds' , 'ok');
   }
-  /**
-   * Enable a number of the home page layouts and set one to default on.
-   * @param  [type] $install_state [description]
-   * @return [type]                [description]
-   */
-  public function configure_pical_homepage_layouts(&$install_state) {
-    $time = time();
-    drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
+    /**
+     * Enable a number of the home page layouts and set one to default on.
+     * @param  [type] $install_state [description]
+     * @return [type]                [description]
+     */
+    public function configure_pical_homepage_layouts(&$install_state) {
+      $time = time();
+      drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
 
-    $default = 'stanford_jumpstart_home_morris';
-    variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-morris');
+      $default = 'stanford_jumpstart_home_morris';
+      variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-morris');
 
-    $context_status = variable_get('context_status', array());
-    $homecontexts = stanford_jumpstart_home_context_default_contexts();
+      $context_status = variable_get('context_status', array());
+      $homecontexts = stanford_jumpstart_home_context_default_contexts();
 
-    $names = array_keys($homecontexts);
+      $names = array_keys($homecontexts);
 
-    // Enable these JSE layouts for use by site owners
-    $enabled['stanford_jumpstart_home_hoover'] = 1;
-    $enabled['stanford_jumpstart_home_morris'] = 1;
-    $enabled['sitewide_jse'] = 1;
-    unset($enabled['stanford_jumpstart_home_terman']);
-    unset($enabled['stanford_jumpstart_home_pettit']);
-    unset($enabled['sitewide_jsa']);
+      // Enable these JSE layouts for use by site owners
+      $enabled['stanford_jumpstart_home_hoover'] = 1;
+      $enabled['stanford_jumpstart_home_morris'] = 1;
+      $enabled['sitewide_jse'] = 1;
+      unset($enabled['stanford_jumpstart_home_terman']);
+      unset($enabled['stanford_jumpstart_home_pettit']);
+      unset($enabled['sitewide_jsa']);
 
     // Disable these layouts
      unset($enabled['stanford_jumpstart_home_lomita']);
@@ -245,13 +245,34 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
   }
 
   /**
+   * Configure the sitewide layout.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function configure_sitewide_layout(&$install_state) {
+    $time = time();
+    drush_log('JSE - Configuring site-wide layout.', 'ok');
+
+    $context_status = variable_get('context_status', array());
+
+    $context_status['sitewide-jse'] = FALSE;
+    $context_status['sitewide-jsa'] = TRUE;
+
+    variable_set('context_status', $context_status);
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished configuring JSE site-wide layout: ' . $time_diff . ' seconds' , 'ok');
+
+  }
+
+  /**
    * Configure the beans used by the JSE layouts.
    * @param  [type] $install_state [description]
    * @return [type]                [description]
    */
   public function configure_jse_beans(&$install_state) {
     $time = time();
-    drush_log('JSE - Configuring Beans.' . $time, 'ok');
+    drush_log('JSE - Configuring Beans.', 'ok');
 
     // Install default JSE block classes.
     $fields = array('module', 'delta', 'css_class');
