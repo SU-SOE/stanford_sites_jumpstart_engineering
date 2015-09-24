@@ -212,8 +212,10 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Enable these JSE layouts for use by site owners
     $enabled['stanford_jumpstart_home_hoover'] = 1;
     $enabled['stanford_jumpstart_home_morris'] = 1;
+    $enabled['sitewide_jse'] = 1;
     unset($enabled['stanford_jumpstart_home_terman']);
     unset($enabled['stanford_jumpstart_home_pettit']);
+    unset($enabled['sitewide_jsa']);
 
     // Disable these layouts
      unset($enabled['stanford_jumpstart_home_lomita']);
@@ -288,6 +290,12 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-small-custom-block'][] = 'span4';
     $cbc_layouts['stanford_jumpstart_home_terman']['views-f73ff55b085ea49217d347de6630cd5a'][] = 'span4 well';
     $cbc_layouts['stanford_jumpstart_home_terman']['views-stanford_events_views-block'][] = 'span4 well';
+
+    $cbc_layouts['sitewide_jse']['bean-jse-logo-block'][] = 'span4';
+    $cbc_layouts['sitewide_jse']['bean-jumpstart-footer-contact-block'][] = 'span2';
+    $cbc_layouts['sitewide_jse']['bean-jumpstart-footer-social-media--0'][] = 'span2';
+    $cbc_layouts['sitewide_jse']['bean-jumpstart-custom-footer-block'][] = 'span2 well';
+    $cbc_layouts['sitewide_jse']['stanford_private_page-stanford_internal_login'][] = 'span2';
 
     variable_set('contextual_block_class', $cbc_layouts);
 
