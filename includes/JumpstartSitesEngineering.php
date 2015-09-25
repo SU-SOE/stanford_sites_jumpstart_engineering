@@ -27,17 +27,12 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Remove some parent tasks.
     // JSE adds content to the site that is different from JSA. Lets
     // disable those modules and add in only the ones we want again.
-   // unset($parent_tasks['stanford_sites_jumpstart_academic_configure_homepage']);
 
-
-    // $tasks['stanford_sites_jumpstart_academic_delete_views'] = array(
-    //   'display_name' => st('Delete default views from DB'),
-    //   'display' => FALSE,
-    //   'type' => 'normal',
-    //   'function' => 'remove_all_default_views_from_db',
-    //   'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-    // );
-
+    // The private files directory setting in the final task causes issues in
+    // JSE unstall. Lets pop it off and place it back on the end.
+    $keys = array_keys($parent_tasks);
+    $finish = array_pop($parent_tasks);
+    $finish_key = array_pop($keys);
 
     $tasks['jse_install_content'] = array(
       'display_name' => st('Install JSE specific content'),
@@ -87,7 +82,12 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    // Do the prefixing stuff.
     $this->prepare_tasks($tasks, get_class());
+
+    // Add the finish task back.
+    $tasks[$finish_key] = $finish;
+
     return array_merge($parent_tasks, $tasks);
   }
 
@@ -104,7 +104,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time = time();
     drush_log('JSE - Starting Content Import. Time: ' . $time, 'ok');
 
-    if (lock_acquire('jumpstart_sites_engineering_install_content')){
+    if (lock_acquire('jumpstart_sites_engineering_install_content')) {
 
       $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
 
@@ -123,19 +123,20 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
       lock_release('jumpstart_sites_engineering_install_content');
       $time_diff = time() - $time;
-      drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds' , 'ok');
+      drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds', 'ok');
     }
     else {
-      drush_log('JSE - Lock not acquired; no content imported' , 'error');
+      drush_log('JSE - Lock not acquired; no content imported', 'error');
     }
 
   }
 
   /**
-   * Installs and configures the Private Pages Section menu for JSE
-   * @param  [type] $install_state [description]
+   * Installs and configures the Private Pages Section menu for JSE.
+   *
+   * @param [type] $install_state
+   *   Description.
    */
-
   public function install_private_pages_section_menu_items(&$install_state) {
     $time = time();
     drush_log('JSE - starting create Private Pages menu items', 'ok');
@@ -146,7 +147,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     menu_cache_clear_all();
     menu_rebuild();
 
-    // Private pages section landing page
+    // Private pages section landing page.
     $items['private-pages'] = array(
       'link_path' => drupal_get_normal_path('private'),
       'link_title' => 'Private Pages',
@@ -154,7 +155,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'weight' => -9,
     );
 
-    // For Faculty
+    // For Faculty.
     $items['private/for-faculty'] = array(
       'link_path' => drupal_get_normal_path('private/for-faculty'),
       'link_title' => 'For Faculty',
@@ -163,7 +164,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'parent' => 'private', // must be already saved.
     );
 
-    // For Students
+    // For Students.
     $items['private/for-students'] = array(
       'link_path' => drupal_get_normal_path('private/for-students'),
       'link_title' => 'For Students',
@@ -172,7 +173,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'parent' => 'private', // must be already saved.
     );
 
-    // For Staff
+    // For Staff.
     $items['private/for-staff'] = array(
       'link_path' => drupal_get_normal_path('private/for-staff'),
       'link_title' => 'For Staff',
@@ -181,7 +182,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'parent' => 'private', // must be already saved.
     );
 
-      // For Faculty / Sub-page
+    // For Faculty / Sub-page.
     $items['private/for-faculty/sub-page'] = array(
       'link_path' => drupal_get_normal_path('private/for-faculty/sub-page'),
       'link_title' => 'Faculty Sub-Page',
@@ -206,7 +207,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     }
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished creating Private Pages menu items: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished creating Private Pages menu items: ' . $time_diff . ' seconds', 'ok');
   }
 
   /**
@@ -216,7 +217,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
    *   Description.
    */
   public function capx_default_configuration(&$install_state) {
-    drush_log('JSE - Configuring CAPx Defaults' , 'status');
+    drush_log('JSE - Configuring CAPx Defaults', 'status');
 
     // Loop through the mapper settings and save to the DB.
     $mappers = $this->get_capx_mappers();
@@ -252,7 +253,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       capx_importer_save($importer);
     }
 
-    drush_log('JSE - Finished Configuring CAPx' , 'status');
+    drush_log('JSE - Finished Configuring CAPx', 'status');
   }
 
 
@@ -502,13 +503,13 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     $names = array_keys($homecontexts);
 
-    // Enable these JSE layouts for use by site owners
+    // Enable these JSE layouts for use by site owners.
     $enabled['stanford_jumpstart_home_hoover'] = 1;
     $enabled['stanford_jumpstart_home_morris'] = 1;
     unset($enabled['stanford_jumpstart_home_terman']);
     unset($enabled['stanford_jumpstart_home_pettit']);
 
-    // Disable these layouts
+    // Disable these layouts.
     unset($enabled['stanford_jumpstart_home_lomita']);
     unset($enabled['stanford_jumpstart_home_mayfield_news_events']);
     unset($enabled['stanford_jumpstart_home_palm_news_events']);
@@ -527,12 +528,12 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $context_status[$default] = FALSE;
     unset($context_status['']);
 
-    // Save settings
+    // Save settings.
     variable_set('stanford_jumpstart_home_active', $default);
     variable_set('context_status', $context_status);
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds', 'ok');
   }
 
   /**
@@ -552,7 +553,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     variable_set('context_status', $context_status);
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished configuring JSE site-wide layout: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished configuring JSE site-wide layout: ' . $time_diff . ' seconds', 'ok');
 
   }
 
@@ -568,13 +569,13 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Install default JSE block classes.
     $fields = array('module', 'delta', 'css_class');
     $values = array(
-      array("bean","jumpstart-small-custom-block", "well"),
-      array("bean","jumpstart-large-custom-block", "well"),
+      array("bean", "jumpstart-small-custom-block", "well"),
+      array("bean", "jumpstart-large-custom-block", "well"),
     );
 
     // Key all the values.
     $insert = db_insert('block_class')->fields($fields);
-    foreach ($values as $k => $value) {
+    foreach ($values as $value) {
       $db_values = array_combine($fields, $value);
       $insert->values($db_values);
     }
@@ -616,7 +617,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     variable_set('contextual_block_class', $cbc_layouts);
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished configuring Beans: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished configuring Beans: ' . $time_diff . ' seconds', 'ok');
   }
 
   /**
