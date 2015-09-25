@@ -27,17 +27,12 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Remove some parent tasks.
     // JSE adds content to the site that is different from JSA. Lets
     // disable those modules and add in only the ones we want again.
-   // unset($parent_tasks['stanford_sites_jumpstart_academic_configure_homepage']);
 
-
-    // $tasks['stanford_sites_jumpstart_academic_delete_views'] = array(
-    //   'display_name' => st('Delete default views from DB'),
-    //   'display' => FALSE,
-    //   'type' => 'normal',
-    //   'function' => 'remove_all_default_views_from_db',
-    //   'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-    // );
-
+    // The private files directory setting in the final task causes issues in
+    // JSE unstall. Lets pop it off and place it back on the end.
+    $keys = array_keys($parent_tasks);
+    $finish = array_pop($parent_tasks);
+    $finish_key = array_pop($keys);
 
     $tasks['jse_install_content'] = array(
       'display_name' => st('Install JSE specific content'),
@@ -52,6 +47,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'display' => FALSE,
       'type' => 'normal',
       'function' => 'install_private_pages_section_menu_items',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
+    $tasks['jse_configure_capx'] = array(
+      'display_name' => st('Create CAPx default configuration.'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'capx_default_configuration',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
@@ -79,7 +82,12 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    // Do the prefixing stuff.
     $this->prepare_tasks($tasks, get_class());
+
+    // Add the finish task back.
+    $tasks[$finish_key] = $finish;
+
     return array_merge($parent_tasks, $tasks);
   }
 
@@ -96,7 +104,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time = time();
     drush_log('JSE - Starting Content Import. Time: ' . $time, 'ok');
 
-    if (lock_acquire('jumpstart_sites_engineering_install_content')){
+    if (lock_acquire('jumpstart_sites_engineering_install_content')) {
 
       $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
 
@@ -106,7 +114,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       $view_importer->set_resource('content');
       $view_importer->set_filters($filters);
       $view_importer->import_content_by_views_and_filters();
-    
+
       // Load up library.
       $this->load_sites_content_importer_files($install_state);
 
@@ -115,19 +123,20 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
       lock_release('jumpstart_sites_engineering_install_content');
       $time_diff = time() - $time;
-      drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds' , 'ok');
+      drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds', 'ok');
     }
     else {
-      drush_log('JSE - Lock not acquired; no content imported' , 'error');
+      drush_log('JSE - Lock not acquired; no content imported', 'error');
     }
 
   }
 
   /**
-   * Installs and configures the Private Pages Section menu for JSE
-   * @param  [type] $install_state [description]
+   * Installs and configures the Private Pages Section menu for JSE.
+   *
+   * @param [type] $install_state
+   *   Description.
    */
-
   public function install_private_pages_section_menu_items(&$install_state) {
     $time = time();
     drush_log('JSE - starting create Private Pages menu items', 'ok');
@@ -138,7 +147,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     menu_cache_clear_all();
     menu_rebuild();
 
-    // Private pages section landing page
+    // Private pages section landing page.
     $items['private-pages'] = array(
       'link_path' => drupal_get_normal_path('private'),
       'link_title' => 'Private Pages',
@@ -146,7 +155,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'weight' => -9,
     );
 
-    // For Faculty
+    // For Faculty.
     $items['private/for-faculty'] = array(
       'link_path' => drupal_get_normal_path('private/for-faculty'),
       'link_title' => 'For Faculty',
@@ -155,7 +164,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'parent' => 'private', // must be already saved.
     );
 
-    // For Students
+    // For Students.
     $items['private/for-students'] = array(
       'link_path' => drupal_get_normal_path('private/for-students'),
       'link_title' => 'For Students',
@@ -164,7 +173,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'parent' => 'private', // must be already saved.
     );
 
-    // For Staff
+    // For Staff.
     $items['private/for-staff'] = array(
       'link_path' => drupal_get_normal_path('private/for-staff'),
       'link_title' => 'For Staff',
@@ -173,7 +182,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'parent' => 'private', // must be already saved.
     );
 
-      // For Faculty / Sub-page
+    // For Faculty / Sub-page.
     $items['private/for-faculty/sub-page'] = array(
       'link_path' => drupal_get_normal_path('private/for-faculty/sub-page'),
       'link_title' => 'Faculty Sub-Page',
@@ -198,56 +207,333 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     }
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished creating Private Pages menu items: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished creating Private Pages menu items: ' . $time_diff . ' seconds', 'ok');
   }
-    /**
-     * Enable a number of the home page layouts and set one to default on.
-     * @param  [type] $install_state [description]
-     * @return [type]                [description]
-     */
-    public function configure_pical_homepage_layouts(&$install_state) {
-      $time = time();
-      drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
 
-      $default = 'stanford_jumpstart_home_morris';
-      variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-morris');
+  /**
+   * Installs default settings and creates an importer and a mapper.
+   *
+   * @param [type] &$install_state
+   *   Description.
+   */
+  public function capx_default_configuration(&$install_state) {
+    drush_log('JSE - Configuring CAPx Defaults', 'status');
 
-      $context_status = variable_get('context_status', array());
-      $homecontexts = stanford_jumpstart_home_context_default_contexts();
+    // Loop through the mapper settings and save to the DB.
+    $mappers = $this->get_capx_mappers();
+    foreach ($mappers as $machine_name => $settings) {
 
-      $names = array_keys($homecontexts);
+      $mapper = entity_create('capx_cfe', array());
 
-      // Enable these JSE layouts for use by site owners
-      $enabled['stanford_jumpstart_home_hoover'] = 1;
-      $enabled['stanford_jumpstart_home_morris'] = 1;
-      unset($enabled['stanford_jumpstart_home_terman']);
-      unset($enabled['stanford_jumpstart_home_pettit']);
+      $mapper->uid = 1;
+      $mapper->title = $settings['title'];
+      $mapper->machine_name = $machine_name;
+      $mapper->type = "mapper";
+      $mapper->settings = $settings;
 
-      // Disable these layouts
-      unset($enabled['stanford_jumpstart_home_lomita']);
-      unset($enabled['stanford_jumpstart_home_mayfield_news_events']);
-      unset($enabled['stanford_jumpstart_home_palm_news_events']);
-      unset($enabled['stanford_jumpstart_home_panama_news_events']);
-      unset($enabled['stanford_jumpstart_home_serra_news_events']);
+      // Do the save.
+      capx_mapper_save($mapper);
+    }
 
-      unset($context_status['']);
+    // Loop through the importer configurations and save them to the db.
+    $importers = $this->get_capx_importers();
+    foreach ($importers as $machine_name => $info) {
+      $settings = $info['settings'];
+      $meta = $info['meta'];
 
-      foreach ($names as $context_name) {
-        $context_status[$context_name] = TRUE;
-        $settings = variable_get('sjh_' . $context_name, array());
-        $settings['site_admin'] = isset($enabled[$context_name]);
-        variable_set('sjh_' . $context_name, $settings);
-      }
+      $importer = entity_create('capx_cfe', array());
+      $importer->type = "importer";
+      $importer->machine_name = $machine_name;
+      $importer->title = $info['title'];
+      $importer->uid = 1;
+      $importer->settings = $settings;
+      $importer->meta = $meta;
 
-      $context_status[$default] = FALSE;
-      unset($context_status['']);
+      // Do the save.
+      capx_importer_save($importer);
+    }
 
-      // Save settings
-      variable_set('stanford_jumpstart_home_active', $default);
-      variable_set('context_status', $context_status);
+    drush_log('JSE - Finished Configuring CAPx', 'status');
+  }
 
-      $time_diff = time() - $time;
-      drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds' , 'ok');
+
+  /**
+   * Returns an array of mapper information to be used to save to the db.
+   *
+   * @return array
+   *   An array of mapper information.
+   */
+  private function get_capx_mappers() {
+    $mappers = array();
+
+    // Default Mapper.
+    $mappers['default'] = array(
+      'fields' => array(
+        'field_s_person_affiliation' => array(
+          'tid' => '',
+        ),
+        'field_s_person_cohort' => array(
+          'value' => '',
+        ),
+        'field_s_person_dissertatn_title' => array(
+          'value' => '',
+        ),
+        'field_s_person_education' => array(
+          'value' => '$.education.*.label.text',
+        ),
+        'field_s_person_email' => array(
+          'email' => '$.primaryContact.email',
+        ),
+        'field_s_person_faculty_title' => array(
+          'value' => '$.longTitle[0]',
+        ),
+        'field_s_person_faculty_type' => array(
+          'tid' => '',
+        ),
+        'field_s_person_fax_display' => array(
+          'value' => '$.primaryContact.fax',
+        ),
+        'field_s_person_file' => array(
+          0 => '',
+        ),
+        'field_s_person_first_name' => array(
+          'value' => '$.names.preferred.firstName',
+        ),
+        'field_s_person_graduation_year' => array(
+          'value' => '',
+        ),
+        'field_s_person_info_links' => array(
+          'url' => '',
+          'title' => '',
+        ),
+        'field_s_person_interests' => array(
+          'tid' => '',
+        ),
+        'field_s_person_last_name' => array(
+          'value' => '$.names.preferred.lastName',
+        ),
+        'field_s_person_mail_address_dspl' => array(
+          'value' => '$.primaryContact.address',
+        ),
+        'field_s_person_mail_code' => array(
+          'value' => '',
+        ),
+        'field_s_person_middle_name' => array(
+          'value' => '',
+        ),
+        'field_s_person_office_hours' => array(
+          'value' => '',
+        ),
+        'field_s_person_office_location' => array(
+          'value' => '',
+        ),
+        'field_s_person_phone_display' => array(
+          'value' => '',
+        ),
+        'field_s_person_profile_picture' => array(
+          0 => '',
+        ),
+        'field_s_person_staff_type' => array(
+          'tid' => '',
+        ),
+        'field_s_person_student_type' => array(
+          'tid' => '',
+        ),
+        'field_s_person_study' => array(
+          'tid' => '',
+        ),
+        'field_s_person_weight' => array(
+          'value' => '',
+        ),
+        'body' => array(
+          'value' => '',
+          'summary' => '',
+        ),
+      ),
+      'properties' => array(
+        'title' => '$.displayName',
+      ),
+      'collections' => array(),
+      'entity_type' => 'node',
+      'bundle_type' => 'stanford_person',
+      'title' => t("Default"),
+    );
+
+    // JSE Default.
+    $mappers["jse_default"] = array(
+      'fields' => array(
+        'field_s_person_affiliation' => array(
+          'tid' => '',
+        ),
+        'field_s_person_cohort' => array(
+          'value' => '',
+        ),
+        'field_s_person_dissertatn_title' => array(
+          'value' => '',
+        ),
+        'field_s_person_education' => array(
+          'value' => '$.education.*.label.text',
+        ),
+        'field_s_person_email' => array(
+          'email' => '$.primaryContact.email',
+        ),
+        'field_s_person_faculty_title' => array(
+          'value' => '$.titles.*.label.text',
+        ),
+        'field_s_person_faculty_type' => array(
+          'tid' => '',
+        ),
+        'field_s_person_fax_display' => array(
+          'value' => '$.primaryContact.fax',
+        ),
+        'field_s_person_file' => array(
+          0 => '',
+        ),
+        'field_s_person_first_name' => array(
+          'value' => '$.names.preferred.firstName',
+        ),
+        'field_s_person_graduation_year' => array(
+          'value' => '',
+        ),
+        'field_s_person_info_links' => array(
+          'url' => '$.internetLinks.*.url',
+          'title' => '$.internetLinks.*.label.text',
+        ),
+        'field_s_person_interests' => array(
+          'tid' => '',
+        ),
+        'field_s_person_last_name' => array(
+          'value' => '$.names.preferred.lastName',
+        ),
+        'field_s_person_mail_address_dspl' => array(
+          'value' => '$.primaryContact.address',
+        ),
+        'field_s_person_mail_code' => array(
+          'value' => '',
+        ),
+        'field_s_person_middle_name' => array(
+          'value' => '$.names.preferred.middleName',
+        ),
+        'field_s_person_office_hours' => array(
+          'value' => '',
+        ),
+        'field_s_person_office_location' => array(
+          'value' => '',
+        ),
+        'field_s_person_phone_display' => array(
+          'value' => '$.primaryContact.phoneNumbers.*',
+        ),
+        'field_s_person_profile_picture' => array(
+          0 => '$.profilePhotos.bigger',
+        ),
+        'field_s_person_staff_type' => array(
+          'tid' => '',
+        ),
+        'field_s_person_student_type' => array(
+          'tid' => '',
+        ),
+        'field_s_person_study' => array(
+          'tid' => '',
+        ),
+        'field_s_person_weight' => array(
+          'value' => '',
+        ),
+        'body' => array(
+          'value' => '$.bio.text',
+          'summary' => '',
+        ),
+      ),
+      'properties' => array(
+        'title' => '$.displayName',
+      ),
+      'collections' => array(),
+      'entity_type' => 'node',
+      'bundle_type' => 'stanford_person',
+      'title' => t("JSE Default"),
+    );
+
+    return $mappers;
+  }
+
+
+  /**
+   * Returns an array of importer configuration information.
+   *
+   * @return array
+   *   An array of importer configuration information.
+   */
+  private function get_capx_importers() {
+    $importers = array();
+
+    // Default.
+    $importers['default'] = array();
+    $importers['default']['title'] = t("Default");
+    $importers['default']['settings'] = array(
+      'mapper' => 'jse_default',
+      'organization' => '',
+      'child_orgs' => 0,
+      'workgroup' => '',
+      'sunet_id' => 'tsui,sheamck,regula,olgary,whitmore,chu,rbaltman,katekate,tomq1,herschla,harbury,rhiju,kobilka,ingmar,danb,hblau,pblumen,lynnw',
+      'cron_option' => 'none',
+      'cron_option_day_number' => '1',
+      'cron_option_day_week' => 'monday',
+      'cron_option_month' => '0',
+      'cron_option_hour' => '2:00',
+      'orphan_action' => 'unpublish',
+    );
+    $importers['default']['meta'] = array();
+
+    return $importers;
+  }
+
+  /**
+   * Enable a number of the home page layouts and set one to default on.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function configure_pical_homepage_layouts(&$install_state) {
+    $time = time();
+    drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
+
+    $default = 'stanford_jumpstart_home_morris';
+    variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-morris');
+
+    $context_status = variable_get('context_status', array());
+    $homecontexts = stanford_jumpstart_home_context_default_contexts();
+
+    $names = array_keys($homecontexts);
+
+    // Enable these JSE layouts for use by site owners.
+    $enabled['stanford_jumpstart_home_hoover'] = 1;
+    $enabled['stanford_jumpstart_home_morris'] = 1;
+    unset($enabled['stanford_jumpstart_home_terman']);
+    unset($enabled['stanford_jumpstart_home_pettit']);
+
+    // Disable these layouts.
+    unset($enabled['stanford_jumpstart_home_lomita']);
+    unset($enabled['stanford_jumpstart_home_mayfield_news_events']);
+    unset($enabled['stanford_jumpstart_home_palm_news_events']);
+    unset($enabled['stanford_jumpstart_home_panama_news_events']);
+    unset($enabled['stanford_jumpstart_home_serra_news_events']);
+
+    unset($context_status['']);
+
+    foreach ($names as $context_name) {
+      $context_status[$context_name] = TRUE;
+      $settings = variable_get('sjh_' . $context_name, array());
+      $settings['site_admin'] = isset($enabled[$context_name]);
+      variable_set('sjh_' . $context_name, $settings);
+    }
+
+    $context_status[$default] = FALSE;
+    unset($context_status['']);
+
+    // Save settings.
+    variable_set('stanford_jumpstart_home_active', $default);
+    variable_set('context_status', $context_status);
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds', 'ok');
   }
 
   /**
@@ -267,7 +553,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     variable_set('context_status', $context_status);
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished configuring JSE site-wide layout: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished configuring JSE site-wide layout: ' . $time_diff . ' seconds', 'ok');
 
   }
 
@@ -283,13 +569,13 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Install default JSE block classes.
     $fields = array('module', 'delta', 'css_class');
     $values = array(
-      array("bean","jumpstart-small-custom-block", "well"),
-      array("bean","jumpstart-large-custom-block", "well"),
+      array("bean", "jumpstart-small-custom-block", "well"),
+      array("bean", "jumpstart-large-custom-block", "well"),
     );
 
     // Key all the values.
     $insert = db_insert('block_class')->fields($fields);
-    foreach ($values as $k => $value) {
+    foreach ($values as $value) {
       $db_values = array_combine($fields, $value);
       $insert->values($db_values);
     }
@@ -331,7 +617,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     variable_set('contextual_block_class', $cbc_layouts);
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished configuring Beans: ' . $time_diff . ' seconds' , 'ok');
+    drush_log('JSE - Finished configuring Beans: ' . $time_diff . ' seconds', 'ok');
   }
 
   /**
@@ -357,4 +643,3 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
   }
 
 }
-
