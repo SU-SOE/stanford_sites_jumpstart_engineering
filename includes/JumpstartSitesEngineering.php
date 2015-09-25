@@ -24,6 +24,12 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Get parent tasks.
     $parent_tasks = parent::get_install_tasks($install_state);
 
+    // Remove some parent tasks.
+    // JSE adds content to the site that is different from JSA. Lets
+    // disable those modules and add in only the ones we want again.
+   // unset($parent_tasks['stanford_sites_jumpstart_academic_configure_homepage']);
+
+
     // $tasks['stanford_sites_jumpstart_academic_delete_views'] = array(
     //   'display_name' => st('Delete default views from DB'),
     //   'display' => FALSE,
@@ -31,6 +37,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     //   'function' => 'remove_all_default_views_from_db',
     //   'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     // );
+
 
     $tasks['jse_install_content'] = array(
       'display_name' => st('Install JSE specific content'),
@@ -56,6 +63,30 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_configure_pical_homepage_layouts'] = array(
+      'display_name' => st('Configure layouts for homepages'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'configure_pical_homepage_layouts',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
+    $tasks['jse_configure_sitewide_layout'] = array(
+      'display_name' => st('Configure site-wide layout'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'configure_sitewide_layout',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
+    $tasks['jse_configure_jse_beans'] = array(
+      'display_name' => st('Configure Beans'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'configure_jse_beans',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $this->prepare_tasks($tasks, get_class());
     return array_merge($parent_tasks, $tasks);
   }
@@ -73,20 +104,30 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time = time();
     drush_log('JSE - Starting Content Import. Time: ' . $time, 'ok');
 
-    $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
+    if (lock_acquire('jumpstart_sites_engineering_install_content')){
 
-    // Load up library.
-    $this->load_sites_content_importer_files($install_state);
+      $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
 
-    $filters = array('sites_products' => array('55'));
-    $view_importer = new SitesContentImporterViews();
-    $view_importer->set_endpoint($endpoint);
-    $view_importer->set_resource('content');
-    $view_importer->set_filters($filters);
-    $view_importer->import_content_by_views_and_filters();
+      $filters = array('tid_raw' => array('55'));
+      $view_importer = new SitesContentImporterViews();
+      $view_importer->set_endpoint($endpoint);
+      $view_importer->set_resource('content');
+      $view_importer->set_filters($filters);
+      $view_importer->import_content_by_views_and_filters();
 
-    $time_diff = time() - $time;
-    drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds' , 'ok');
+      // Load up library.
+      $this->load_sites_content_importer_files($install_state);
+
+      $this->fetch_jse_content_beans($endpoint);
+      drush_log('JSE - Finished importing beans.', 'ok');
+
+      lock_release('jumpstart_sites_engineering_install_content');
+      $time_diff = time() - $time;
+      drush_log('JSE - Finished importing content. Import took: ' . $time_diff . ' seconds' , 'ok');
+    }
+    else {
+      drush_log('JSE - Lock not acquired; no content imported' , 'error');
+    }
 
   }
 
@@ -167,7 +208,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time_diff = time() - $time;
     drush_log('JSE - Finished creating Private Pages menu items: ' . $time_diff . ' seconds' , 'ok');
   }
-
 
   /**
    * Installs default settings and creates an importer and a mapper.
@@ -445,6 +485,160 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     return $importers;
   }
 
+  /**
+   * Enable a number of the home page layouts and set one to default on.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function configure_pical_homepage_layouts(&$install_state) {
+    $time = time();
+    drush_log('JSE - Configuring PICAL homepage layouts.' . $time, 'ok');
 
+    $default = 'stanford_jumpstart_home_morris';
+    variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-morris');
 
- }
+    $context_status = variable_get('context_status', array());
+    $homecontexts = stanford_jumpstart_home_context_default_contexts();
+
+    $names = array_keys($homecontexts);
+
+    // Enable these JSE layouts for use by site owners
+    $enabled['stanford_jumpstart_home_hoover'] = 1;
+    $enabled['stanford_jumpstart_home_morris'] = 1;
+    unset($enabled['stanford_jumpstart_home_terman']);
+    unset($enabled['stanford_jumpstart_home_pettit']);
+
+    // Disable these layouts
+    unset($enabled['stanford_jumpstart_home_lomita']);
+    unset($enabled['stanford_jumpstart_home_mayfield_news_events']);
+    unset($enabled['stanford_jumpstart_home_palm_news_events']);
+    unset($enabled['stanford_jumpstart_home_panama_news_events']);
+    unset($enabled['stanford_jumpstart_home_serra_news_events']);
+
+    unset($context_status['']);
+
+    foreach ($names as $context_name) {
+      $context_status[$context_name] = TRUE;
+      $settings = variable_get('sjh_' . $context_name, array());
+      $settings['site_admin'] = isset($enabled[$context_name]);
+      variable_set('sjh_' . $context_name, $settings);
+    }
+
+    $context_status[$default] = FALSE;
+    unset($context_status['']);
+
+    // Save settings
+    variable_set('stanford_jumpstart_home_active', $default);
+    variable_set('context_status', $context_status);
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished configuring JSE homepage layouts: ' . $time_diff . ' seconds' , 'ok');
+  }
+
+  /**
+   * Configure the sitewide layout.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function configure_sitewide_layout(&$install_state) {
+    $time = time();
+    drush_log('JSE - Configuring site-wide layout.', 'ok');
+
+    $context_status = variable_get('context_status', array());
+
+    $context_status['sitewide_jse'] = FALSE;
+    $context_status['sitewide_jsa'] = TRUE;
+
+    variable_set('context_status', $context_status);
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished configuring JSE site-wide layout: ' . $time_diff . ' seconds' , 'ok');
+
+  }
+
+  /**
+   * Configure the beans used by the JSE layouts.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function configure_jse_beans(&$install_state) {
+    $time = time();
+    drush_log('JSE - Configuring Beans.', 'ok');
+
+    // Install default JSE block classes.
+    $fields = array('module', 'delta', 'css_class');
+    $values = array(
+      array("bean","jumpstart-small-custom-block", "well"),
+      array("bean","jumpstart-large-custom-block", "well"),
+    );
+
+    // Key all the values.
+    $insert = db_insert('block_class')->fields($fields);
+    foreach ($values as $k => $value) {
+      $db_values = array_combine($fields, $value);
+      $insert->values($db_values);
+    }
+    $insert->execute();
+
+    // Install contextual block classes.
+    $cbc_layouts = array();
+
+    $cbc_layouts['stanford_jumpstart_home_hoover']['bean-homepage-banner-image'][] = 'span8';
+    $cbc_layouts['stanford_jumpstart_home_hoover']['bean-homepage-about-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_hoover']['bean-jumpstart-small-custom-block'][] = 'span4';
+    $cbc_layouts['stanford_jumpstart_home_hoover']['bean-jumpstart-large-custom-block'][] = 'span8 well';
+
+    $cbc_layouts['stanford_jumpstart_home_morris']['bean-homepage-banner-image'][] = 'span8';
+    $cbc_layouts['stanford_jumpstart_home_morris']['bean-homepage-about-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_morris']['bean-jumpstart-small-custom-block'][] = 'span4';
+    $cbc_layouts['stanford_jumpstart_home_morris']['views-f73ff55b085ea49217d347de6630cd5a'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_morris']['views-stanford_events_views-block'][] = 'span4 well';
+
+    $cbc_layouts['stanford_jumpstart_home_pettit']['bean-homepage-banner-image'][] = 'span12';
+    $cbc_layouts['stanford_jumpstart_home_pettit']['bean-homepage-about-block'][] = 'span8 well';
+    $cbc_layouts['stanford_jumpstart_home_pettit']['bean-jumpstart-large-custom-block'][] = 'span8';
+    $cbc_layouts['stanford_jumpstart_home_pettit']['views-f73ff55b085ea49217d347de6630cd5a'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_pettit']['views-stanford_events_views-block'][] = 'span4 well';
+
+    $cbc_layouts['stanford_jumpstart_home_terman']['bean-homepage-banner-image'][] = 'span12';
+    $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-about-block'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-large-custom-block'][] = 'span8';
+    $cbc_layouts['stanford_jumpstart_home_terman']['bean-jumpstart-small-custom-block'][] = 'span4';
+    $cbc_layouts['stanford_jumpstart_home_terman']['views-f73ff55b085ea49217d347de6630cd5a'][] = 'span4 well';
+    $cbc_layouts['stanford_jumpstart_home_terman']['views-stanford_events_views-block'][] = 'span4 well';
+
+    $cbc_layouts['sitewide_jse']['bean-jse-logo-block'][] = 'span4';
+    $cbc_layouts['sitewide_jse']['bean-jumpstart-footer-contact-block'][] = 'span2';
+    $cbc_layouts['sitewide_jse']['bean-jumpstart-footer-social-media--0'][] = 'span2';
+    $cbc_layouts['sitewide_jse']['bean-jumpstart-custom-footer-block'][] = 'span2';
+    $cbc_layouts['sitewide_jse']['stanford_private_page-stanford_internal_login'][] = 'span2';
+
+    variable_set('contextual_block_class', $cbc_layouts);
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished configuring Beans: ' . $time_diff . ' seconds' , 'ok');
+  }
+
+  /**
+   * Fetches beans from jsa-content
+   * @param  [type] $endpoint [description]
+   * @return [type]           [description]
+   */
+  private function fetch_jse_content_beans($endpoint) {
+
+    $uuids = array(
+      'e813c236-7400-4f43-ad18-736617ceb28e', // Jumpstart Home Page Banner Image.
+      '40cabca1-7d44-42bf-a012-db53fdccd350', // Jumpstart Large Custom Block.
+      '7e510af6-c003-402d-91a4-7480dac1484a', // Jumpstart Small Custom Block.
+      '2c570a0a-d52a-4e8b-bf36-ec01b2777932', // JSE Logo Block.
+      '87527e6a-1f9e-4b39-a999-c138851b3a47', // Jumpstart Custom Footer Block.
+    );
+
+    $importer = new SitesContentImporter();
+    $importer->set_endpoint($endpoint);
+    $importer->set_bean_uuids($uuids);
+    $importer->import_content_beans();
+
+  }
+
+}
