@@ -261,8 +261,8 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     $context_status = variable_get('context_status', array());
 
-    $context_status['sitewide-jse'] = FALSE;
-    $context_status['sitewide-jsa'] = TRUE;
+    $context_status['sitewide_jse'] = FALSE;
+    $context_status['sitewide_jsa'] = TRUE;
 
     variable_set('context_status', $context_status);
 
