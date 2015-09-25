@@ -474,7 +474,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'child_orgs' => 0,
       'workgroup' => '',
       'sunet_id' => 'tsui,sheamck,regula,olgary,whitmore,chu,rbaltman,katekate,tomq1,herschla,harbury,rhiju,kobilka,ingmar,danb,hblau,pblumen,lynnw',
-      'cron_option' => 'daily',
+      'cron_option' => 'none',
       'cron_option_day_number' => '1',
       'cron_option_day_week' => 'monday',
       'cron_option_month' => '0',
