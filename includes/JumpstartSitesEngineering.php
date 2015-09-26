@@ -46,6 +46,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'function' => 'install_content',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
+    
+    $tasks['jse_set_jse_variables'] = array(
+        'display_name' => st('Install JSE needed variables'),
+        'display' => FALSE,
+        'type' => 'normal',
+        'function' => 'set_jse_variables',
+        'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
 
     $tasks['jse_install_pps_menu_items'] = array(
       'display_name' => st('Install private pages section menu items.'),
@@ -75,6 +83,19 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     return array_merge($parent_tasks, $tasks);
   }
 
+  // Set Jumpstart Engineering Specific variables and settings
+  //
+  //
+  
+  public function set_jse_variables(&$install_state) {
+    drush_log('JSE - Setting JSE Specific Variables.', 'ok');
+
+
+    // Variables.
+    variable_set('stanford_jumpstart_engineering', TRUE);
+    drush_log('JSE - Finished Setting JSE Variables.', 'ok');
+  }
+  
   // Install tasks below.
   // //////////////////////////////////////////////////////////////////////////
 
