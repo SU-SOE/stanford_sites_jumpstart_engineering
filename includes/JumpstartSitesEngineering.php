@@ -41,7 +41,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'function' => 'install_content',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
-    
+
     $tasks['jse_set_jse_variables'] = array(
         'display_name' => st('Install JSE needed variables'),
         'display' => FALSE,
@@ -102,7 +102,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
   // Set Jumpstart Engineering Specific variables and settings
   //
   //
-  
+
   public function set_jse_variables(&$install_state) {
     drush_log('JSE - Setting JSE Specific Variables.', 'ok');
 
@@ -112,7 +112,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     variable_del('stanford_jumpstart_academic');
     drush_log('JSE - Finished Setting JSE Variables.', 'ok');
   }
-  
+
   // Install tasks below.
   // //////////////////////////////////////////////////////////////////////////
 
@@ -495,7 +495,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'organization' => '',
       'child_orgs' => 0,
       'workgroup' => '',
-      'sunet_id' => 'tsui,sheamck,regula,olgary,whitmore,chu,rbaltman,katekate,tomq1,herschla,harbury,rhiju,kobilka,ingmar,danb,hblau,pblumen,lynnw',
+      'sunet_id' => '',
       'cron_option' => 'none',
       'cron_option_day_number' => '1',
       'cron_option_day_week' => 'monday',
