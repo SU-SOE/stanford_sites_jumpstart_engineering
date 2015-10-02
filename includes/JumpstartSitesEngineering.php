@@ -89,6 +89,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'function' => 'configure_jse_beans',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
+    
+    $tasks['jse_install_jumpstart_users'] = array(
+      'display_name' => st('Create Jumpstart Users.'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'jse_install_jumpstart_users',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
 
     // Do the prefixing stuff.
     $this->prepare_tasks($tasks, get_class());
@@ -662,6 +670,83 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $importer->set_endpoint($endpoint);
     $importer->set_bean_uuids($uuids);
     $importer->import_content_beans();
+
+  }
+  
+  /**
+   * Installs and configures the default users for jumpstart
+   * @param  [array] $install_state [the current installation state]
+   */
+  public function jse_install_jumpstart_users(&$install_state) {
+
+    drush_log('JSE - Starting install users', 'status');
+
+    // Need this for UI install.
+    require_once DRUPAL_ROOT . '/includes/password.inc';
+    $install_vars = variable_get('stanford_jumpstart_install', array());
+    $config_form_data = $install_state['forms']['install_configure_form'];
+
+    // Get some stored variables.
+    if ($install_state['interactive']) {
+      $full_name  = isset($install_vars['full_name']) ? $install_vars['full_name'] : "School of Engineering";
+      $sunetid    = isset($install_vars['sunetid']) ? $install_vars['sunetid'] : 'jse-admins';
+    }
+    else if (function_exists('drush_get_option')) {
+      $full_name  = isset($config_form_data['stanford_sites_requester_name']) ? $config_form_data['stanford_sites_requester_name'] : drush_get_option('full_name', 'School of Engineering');
+      $sunetid    = isset($config_form_data['stanford_sites_requester_sunetid']) ? $config_form_data['stanford_sites_requester_sunetid'] : drush_get_option('sunetid', 'jse-admins');
+    }
+    else {
+      $full_name  = "Stanford Webservices";
+      $sunetid    = "webservices";
+    }
+
+    // add WMD user (site owner)
+    // drush waau $sunetid --name="$fullname"
+    $sunet = strtolower(trim($sunetid));
+    $authname = $sunet . '@stanford.edu';
+
+    $sunet_role = user_role_load_by_name('SUNet User');
+    $owner_role = user_role_load_by_name('site owner');
+    $editor_role = user_role_load_by_name('editor');
+    $admin_role = user_role_load_by_name('administrator');
+    $member_role = user_role_load_by_name('site member');
+
+    // Change user 1, currently admin, to jse-admins
+    $account = user_load(1, TRUE);
+    $edit = array();
+    $edit['mail'] = "jse-admins@lists.stanford.edu";
+    $edit['status'] = TRUE;
+    $roles = array(DRUPAL_AUTHENTICATED_RID => TRUE, $sunet_role->rid => TRUE, $admin_role->rid => TRUE);
+    $edit['roles'] = $roles;
+    $edit['timezone'] = variable_get('date_default_timezone', '');
+    $account = user_save($account, $edit);
+
+    // Change the sunet requester user to site owner
+    $edit = array();
+    $user3 = user_load_by_mail($authname);
+
+    if ($user3) {
+      $roles = array(DRUPAL_AUTHENTICATED_RID => TRUE, $sunet_role->rid => TRUE, $owner_role->rid => TRUE);
+      $edit['roles'] = $roles;
+      $user3 = user_save($user3, $edit);
+      // Check our chosen authentication scheme.
+      $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
+      if ($auth_method == 'simplesamlphp') {
+        user_set_authmaps($user3, array('authname_simplesamlphp_auth' => $authname));
+      }
+      else {
+        user_set_authmaps($user3, array('authname_webauth' => $authname));
+      }
+    }
+
+    // Map soe:jse-admins to administrator role
+    // drush wamr soe:jse-admins administrator
+    if(module_exists('webauth_extras')) {
+      module_load_include('inc', 'webauth_extras', 'webauth_extras.drush');
+      drush_webauth_extras_webauth_map_role('soe:jse-admins', 'administrator');
+    }
+
+    drush_log('JSE - Finished installing users', 'ok');
 
   }
 
