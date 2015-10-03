@@ -692,12 +692,12 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       $sunetid    = isset($install_vars['sunetid']) ? $install_vars['sunetid'] : 'jse-admins';
     }
     else if (function_exists('drush_get_option')) {
-      $full_name  = isset($config_form_data['stanford_sites_requester_name']) ? $config_form_data['stanford_sites_requester_name'] : drush_get_option('full_name', 'School of Engineering');
+      $full_name  = isset($config_form_data['stanford_sites_requester_name']) ? $config_form_data['stanford_sites_requester_name'] : drush_get_option('full_name', 'Engineering');
       $sunetid    = isset($config_form_data['stanford_sites_requester_sunetid']) ? $config_form_data['stanford_sites_requester_sunetid'] : drush_get_option('sunetid', 'jse-admins');
     }
     else {
-      $full_name  = "Stanford Webservices";
-      $sunetid    = "webservices";
+      $full_name  = "Engineering";
+      $sunetid    = "jse-admins";
     }
 
     // add WMD user (site owner)
