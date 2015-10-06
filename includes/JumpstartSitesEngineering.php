@@ -530,8 +530,8 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Enable these JSE layouts for use by site owners.
     $enabled['stanford_jumpstart_home_hoover'] = 1;
     $enabled['stanford_jumpstart_home_morris'] = 1;
-    unset($enabled['stanford_jumpstart_home_terman']);
-    unset($enabled['stanford_jumpstart_home_pettit']);
+    $enabled['stanford_jumpstart_home_terman'] = 1;
+    $enabled['stanford_jumpstart_home_pettit'] = 1;
 
     // Disable these layouts.
     unset($enabled['stanford_jumpstart_home_lomita']);
