@@ -126,7 +126,9 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time = time();
     drush_log('JSE - Starting Content Import. Time: ' . $time, 'ok');
 
-    if (lock_acquire('jumpstart_sites_engineering_install_content')) {
+    drupal_set_time_limit(600);
+
+    if (lock_acquire('jumpstart_sites_engineering_install_content', 600.0)) {
 
       $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
 
