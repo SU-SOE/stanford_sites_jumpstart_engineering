@@ -134,7 +134,9 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time = time();
     drush_log('JSE - Starting Content Import. Time: ' . $time, 'ok');
 
-    if (lock_acquire('jumpstart_sites_engineering_install_content')) {
+    drupal_set_time_limit(600);
+
+    if (lock_acquire('jumpstart_sites_engineering_install_content', 600.0)) {
 
       $endpoint = 'https://sites.stanford.edu/jsa-content/jsainstall';
 
@@ -536,8 +538,8 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Enable these JSE layouts for use by site owners.
     $enabled['stanford_jumpstart_home_hoover'] = 1;
     $enabled['stanford_jumpstart_home_morris'] = 1;
-    unset($enabled['stanford_jumpstart_home_terman']);
-    unset($enabled['stanford_jumpstart_home_pettit']);
+    $enabled['stanford_jumpstart_home_terman'] = 1;
+    $enabled['stanford_jumpstart_home_pettit'] = 1;
 
     // Disable these layouts.
     unset($enabled['stanford_jumpstart_home_lomita']);
