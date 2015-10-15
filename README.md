@@ -3,6 +3,7 @@
 
 Maintainers: [boznik](https://github.com/boznik), [sherakama](https://github.com/sherakama), 
 [cjwest](https://github.com/cjwest)
+
 [Changelog.md](CHANGELOG.md)
 
 This is the installation profile for the JSE distribution and contains many
