@@ -1,10 +1,10 @@
 #[Jumpstart Engineering (JSE)](https://github.com/SU-SWS/stanford_sites_jumpstart_engineering)
 ##### Version: 7.x-1.0
 
-Maintainers: [boznik](https://github.com/boznik),
-[sherakama](https://github.com/sherakama)
+Maintainers: [boznik](https://github.com/boznik), [sherakama](https://github.com/sherakama), and
 [cjwest](https://github.com/cjwest)
-[Changelog.txt](CHANGELOG.txt)
+
+[Changelog.md](CHANGELOG.md)
 
 This is the installation profile for the JSE distribution and contains many
 installation tasks and setup features. It extends the Jumpstart Academic
