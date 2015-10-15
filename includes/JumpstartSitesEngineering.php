@@ -180,7 +180,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     menu_rebuild();
 
     // Private pages section landing page.
-    $items['private-pages'] = array(
+    $items['private'] = array(
       'link_path' => drupal_get_normal_path('private'),
       'link_title' => 'Private Pages',
       'menu_name' => 'menu-menu-private-pages',
@@ -193,7 +193,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'link_title' => 'For Faculty',
       'menu_name' => 'menu-menu-private-pages',
       'weight' => -7,
-      'parent' => 'private', // must be already saved.
     );
 
     // For Students.
@@ -202,7 +201,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'link_title' => 'For Students',
       'menu_name' => 'menu-menu-private-pages',
       'weight' => -5,
-      'parent' => 'private', // must be already saved.
     );
 
     // For Staff.
@@ -211,7 +209,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'link_title' => 'For Staff',
       'menu_name' => 'menu-menu-private-pages',
       'weight' => -3,
-      'parent' => 'private', // must be already saved.
     );
 
     // For Faculty / Sub-page.
