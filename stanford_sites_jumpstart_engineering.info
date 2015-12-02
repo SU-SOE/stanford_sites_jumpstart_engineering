@@ -23,7 +23,6 @@ dependencies[] = stanford_private_page
 dependencies[] = stanford_private_page_access
 dependencies[] = stanford_private_page_administration
 dependencies[] = stanford_private_page_section
-dependencies[] = stanford_private_page_layouts
 dependencies[] = stanford_jumpstart_engineering
 dependencies[] = stanford_jse_layouts
 dependencies[] = stanford_jse_roles
