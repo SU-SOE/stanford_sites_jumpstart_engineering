@@ -58,6 +58,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_install_main_menu_items'] = array(
+      'display_name' => st('Install main menu items.'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'install_main_menu_items',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $tasks['jse_configure_capx'] = array(
       'display_name' => st('Create CAPx default configuration.'),
       'display' => FALSE,
@@ -161,6 +169,50 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       drush_log('JSE - Lock not acquired; no content imported', 'error');
     }
 
+  }
+  /**
+   * Installs and configures the Main menu items for JSE.
+   *
+   * @param [type] $install_state
+   *   Description.
+   */
+  public function install_main_menu_items(&$install_state) {
+    $time = time();
+    drush_log('JSE - starting create Main menu items', 'ok');
+    $items = array();
+
+    // Rebuild the menu cache before starting this.
+    drupal_static_reset();
+    menu_cache_clear_all();
+    menu_rebuild();
+
+
+  // About / affiliate-organizations
+    $items['about/affiliate-organization'] = array(
+      'link_path' => drupal_get_normal_path('about/affiliate-organizations'),
+      'link_title' => 'Affiliate Organizations',
+      'menu_name' => 'main-menu',
+      'weight' => -4,
+      'parent' => 'about', // must be saved prior to contact item.
+    );
+
+    // Loop through each of the items and save them.
+    foreach ($items as $k => $v) {
+
+      // Check to see if there is a parent declaration. If there is then find
+      // the mlid of the parent item and attach it to the menu item being saved.
+      if (isset($v['parent'])) {
+        $v['plid'] = $items[$v['parent']]['mlid'];
+        unset($v['parent']); // Remove fluff before save.
+      }
+      // Save the menu item.
+      $mlid = menu_link_save($v);
+      $v['mlid'] = $mlid;
+      $items[$k] = $v;
+    }
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished creating Main Menu items: ' . $time_diff . ' seconds', 'ok');
   }
 
   /**
