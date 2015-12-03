@@ -59,10 +59,10 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     );
 
     $tasks['jse_install_main_menu_items'] = array(
-      'display_name' => st('Install main menu items.'),
+      'display_name' => st('Install JSE main menu items.'),
       'display' => FALSE,
       'type' => 'normal',
-      'function' => 'install_main_menu_items',
+      'function' => 'jse_install_main_menu_items',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
@@ -176,7 +176,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
    * @param [type] $install_state
    *   Description.
    */
-  public function install_main_menu_items(&$install_state) {
+  public function jse_install_main_menu_items(&$install_state) {
     $time = time();
     drush_log('JSE - starting create Main menu items', 'ok');
     $items = array();
