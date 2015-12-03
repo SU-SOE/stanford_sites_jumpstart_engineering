@@ -192,7 +192,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'link_path' => drupal_get_normal_path('about/affiliate-organizations'),
       'link_title' => 'Affiliate Organizations',
       'menu_name' => 'main-menu',
-      'weight' => -4,
+      'weight' => -5,
       'parent' => 'about', // must be saved prior to contact item.
     );
 
