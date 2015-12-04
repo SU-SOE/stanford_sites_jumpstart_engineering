@@ -178,7 +178,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
    */
   public function jse_install_main_menu_items(&$install_state) {
     $time = time();
-    drush_log('JSE - starting create Main menu items', 'ok');
+    drush_log('JSE - Start creating Main menu items', 'ok');
     $items = array();
 
     // Rebuild the menu cache before starting this.
@@ -186,6 +186,20 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     menu_cache_clear_all();
     menu_rebuild();
 
+    // Get the parent link id for the "About" menu item
+    $plid = array();
+    $parent = 'node/51';
+    $menu_name = 'main-menu';
+    $menu_info = db_select('menu_links' , 'ml')
+      ->condition('ml.link_path' , $parent)
+      ->condition('ml.menu_name', $menu_name)
+      ->fields('ml', array('mlid', 'plid'))
+      ->execute()
+      ->fetchAll();
+
+    foreach($menu_info as $key => $value) {
+      $plid[] = $menu_info[$key]->mlid;
+    }
 
   // About / affiliate-organizations
     $items['about/affiliate-organization'] = array(
@@ -193,7 +207,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'link_title' => 'Affiliate Organizations',
       'menu_name' => 'main-menu',
       'weight' => -5,
-      'parent' => 'about', // must be saved prior to contact item.
+      'plid' => $plid[0], // must be saved prior to contact item.
     );
 
     // Loop through each of the items and save them.
@@ -201,10 +215,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
       // Check to see if there is a parent declaration. If there is then find
       // the mlid of the parent item and attach it to the menu item being saved.
-      if (isset($v['parent'])) {
-        $v['plid'] = $items[$v['parent']]['mlid'];
-        unset($v['parent']); // Remove fluff before save.
+
+      if (!isset($v['plid'])) {
+        if (isset($v['parent'])) {
+          $v['plid'] = $items[$v['parent']]['mlid'];
+          unset($v['parent']); // Remove fluff before save.
+        }
       }
+
       // Save the menu item.
       $mlid = menu_link_save($v);
       $v['mlid'] = $mlid;
