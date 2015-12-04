@@ -43,11 +43,11 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     );
 
     $tasks['jse_set_jse_variables'] = array(
-        'display_name' => st('Install JSE needed variables'),
-        'display' => FALSE,
-        'type' => 'normal',
-        'function' => 'set_jse_variables',
-        'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+      'display_name' => st('Install JSE needed variables'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'set_jse_variables',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
     $tasks['jse_install_pps_menu_items'] = array(
@@ -97,7 +97,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'function' => 'configure_jse_beans',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
-    
+
     $tasks['jse_install_jumpstart_users'] = array(
       'display_name' => st('Create Jumpstart Users.'),
       'display' => FALSE,
@@ -170,6 +170,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     }
 
   }
+
   /**
    * Installs and configures the Main menu items for JSE.
    *
@@ -190,18 +191,18 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $plid = array();
     $parent = 'node/51';
     $menu_name = 'main-menu';
-    $menu_info = db_select('menu_links' , 'ml')
-      ->condition('ml.link_path' , $parent)
+    $menu_info = db_select('menu_links', 'ml')
+      ->condition('ml.link_path', $parent)
       ->condition('ml.menu_name', $menu_name)
       ->fields('ml', array('mlid', 'plid'))
       ->execute()
       ->fetchAll();
 
-    foreach($menu_info as $key => $value) {
+    foreach ($menu_info as $key => $value) {
       $plid[] = $menu_info[$key]->mlid;
     }
 
-  // About / affiliate-organizations
+    // About / affiliate-organizations
     $items['about/affiliate-organization'] = array(
       'link_path' => drupal_get_normal_path('about/affiliate-organizations'),
       'link_title' => 'Affiliate Organizations',
@@ -733,13 +734,20 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
   private function fetch_jse_content_beans($endpoint) {
 
     $uuids = array(
-      '04cef32d-aa4b-477c-850e-e9efd331fa4c', // Jumpstart Home Page Banner - No Caption.
-      '40cabca1-7d44-42bf-a012-db53fdccd350', // Jumpstart Large Custom Block.
-      '7e510af6-c003-402d-91a4-7480dac1484a', // Jumpstart Small Custom Block.
-      '2c570a0a-d52a-4e8b-bf36-ec01b2777932', // JSE Logo Block.
-      '593aed4a-653e-4bea-8129-9733f4b2bd4b', // JSE Linked Logo Block
-      '87527e6a-1f9e-4b39-a999-c138851b3a47', // Jumpstart Custom Footer Block.
-      'afb406ad-c08f-4c91-a179-e703a8afc6ca', // Jumpstart Home Page Full-Width Banner - No Caption
+      '04cef32d-aa4b-477c-850e-e9efd331fa4c',
+      // Jumpstart Home Page Banner - No Caption.
+      '40cabca1-7d44-42bf-a012-db53fdccd350',
+      // Jumpstart Large Custom Block.
+      '7e510af6-c003-402d-91a4-7480dac1484a',
+      // Jumpstart Small Custom Block.
+      '2c570a0a-d52a-4e8b-bf36-ec01b2777932',
+      // JSE Logo Block.
+      '593aed4a-653e-4bea-8129-9733f4b2bd4b',
+      // JSE Linked Logo Block
+      '87527e6a-1f9e-4b39-a999-c138851b3a47',
+      // Jumpstart Custom Footer Block.
+      'afb406ad-c08f-4c91-a179-e703a8afc6ca',
+      // Jumpstart Home Page Full-Width Banner - No Caption
     );
 
     $importer = new SitesContentImporter();
@@ -748,7 +756,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $importer->import_content_beans();
 
   }
-  
+
   /**
    * Installs and configures the default users for jumpstart
    * @param  [array] $install_state [the current installation state]
@@ -764,16 +772,18 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     // Get some stored variables.
     if ($install_state['interactive']) {
-      $full_name  = isset($install_vars['full_name']) ? $install_vars['full_name'] : "School of Engineering";
-      $sunetid    = isset($install_vars['sunetid']) ? $install_vars['sunetid'] : 'jse-admins';
-    }
-    else if (function_exists('drush_get_option')) {
-      $full_name  = isset($config_form_data['stanford_sites_requester_name']) ? $config_form_data['stanford_sites_requester_name'] : drush_get_option('full_name', 'Engineering');
-      $sunetid    = isset($config_form_data['stanford_sites_requester_sunetid']) ? $config_form_data['stanford_sites_requester_sunetid'] : drush_get_option('sunetid', 'jse-admins');
+      $full_name = isset($install_vars['full_name']) ? $install_vars['full_name'] : "School of Engineering";
+      $sunetid = isset($install_vars['sunetid']) ? $install_vars['sunetid'] : 'jse-admins';
     }
     else {
-      $full_name  = "Engineering";
-      $sunetid    = "jse-admins";
+      if (function_exists('drush_get_option')) {
+        $full_name = isset($config_form_data['stanford_sites_requester_name']) ? $config_form_data['stanford_sites_requester_name'] : drush_get_option('full_name', 'Engineering');
+        $sunetid = isset($config_form_data['stanford_sites_requester_sunetid']) ? $config_form_data['stanford_sites_requester_sunetid'] : drush_get_option('sunetid', 'jse-admins');
+      }
+      else {
+        $full_name = "Engineering";
+        $sunetid = "jse-admins";
+      }
     }
 
     // add WMD user (site owner)
@@ -792,7 +802,11 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $edit = array();
     $edit['mail'] = "jse-admins@lists.stanford.edu";
     $edit['status'] = TRUE;
-    $roles = array(DRUPAL_AUTHENTICATED_RID => TRUE, $sunet_role->rid => TRUE, $admin_role->rid => TRUE);
+    $roles = array(
+      DRUPAL_AUTHENTICATED_RID => TRUE,
+      $sunet_role->rid => TRUE,
+      $admin_role->rid => TRUE
+    );
     $edit['roles'] = $roles;
     $edit['timezone'] = variable_get('date_default_timezone', '');
     $account = user_save($account, $edit);
@@ -802,7 +816,11 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $user3 = user_load_by_mail($authname);
 
     if ($user3) {
-      $roles = array(DRUPAL_AUTHENTICATED_RID => TRUE, $sunet_role->rid => TRUE, $owner_role->rid => TRUE);
+      $roles = array(
+        DRUPAL_AUTHENTICATED_RID => TRUE,
+        $sunet_role->rid => TRUE,
+        $owner_role->rid => TRUE
+      );
       $edit['roles'] = $roles;
       $user3 = user_save($user3, $edit);
       // Check our chosen authentication scheme.
@@ -817,7 +835,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     // Map soe:jse-admins to administrator role
     // drush wamr soe:jse-admins administrator
-    if(module_exists('webauth_extras')) {
+    if (module_exists('webauth_extras')) {
       module_load_include('inc', 'webauth_extras', 'webauth_extras.drush');
       drush_webauth_extras_webauth_map_role('soe:jse-admins', 'administrator');
     }
