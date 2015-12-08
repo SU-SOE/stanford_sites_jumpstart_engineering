@@ -187,9 +187,22 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     menu_cache_clear_all();
     menu_rebuild();
 
+
+    // Get nid for the "About" node
+    $nid = array();
+    $db_info = db_select('node', 'n')
+      ->condition('n.title', 'About')
+      ->fields('n', array('nid'))
+      ->execute()
+      ->fetchAll();
+
+    foreach ($db_info as $key => $value){
+      $nid[] = $menu_info[$key]->nid;
+    }
+
     // Get the parent link id for the "About" menu item
     $plid = array();
-    $parent = 'node/51';
+    $parent = 'node/' . $nid[0];
     $menu_name = 'main-menu';
     $menu_info = db_select('menu_links', 'ml')
       ->condition('ml.link_path', $parent)
