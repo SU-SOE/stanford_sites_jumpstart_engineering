@@ -197,7 +197,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       ->fetchAll();
 
     foreach ($db_info as $key => $value){
-      $nid[] = $menu_info[$key]->nid;
+      $nid[] = $db_info[$key]->nid;
     }
 
     var_dump($db_info);
@@ -207,7 +207,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $plid = array();
     $parent = 'node/' . $nid[0];
     var_dump($parent);
-    
+
     $menu_name = 'main-menu';
     $menu_info = db_select('menu_links', 'ml')
       ->condition('ml.link_path', $parent)
