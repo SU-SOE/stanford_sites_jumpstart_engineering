@@ -20,6 +20,7 @@ dependencies[] = content_access
 dependencies[] = contextual_view_modes
 
 # Stanford Stuff
+dependencies[] = stanford_person_cap
 dependencies[] = stanford_private_page
 dependencies[] = stanford_private_page_access
 dependencies[] = stanford_private_page_administration
