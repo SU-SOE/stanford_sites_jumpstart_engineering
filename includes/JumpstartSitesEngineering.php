@@ -457,6 +457,10 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
         'field_s_person_weight' => array(
           'value' => '',
         ),
+        'field_s_person_profile_link' => array(
+          'url' => '$.meta.links[1].href',
+          'title' => '',
+        ),
         'body' => array(
           'value' => '',
           'summary' => '',
@@ -549,6 +553,10 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
         ),
         'field_s_person_weight' => array(
           'value' => '',
+        ),
+        'field_s_person_profile_link' => array(
+          'url' => '$.meta.links[1].href',
+          'title' => '',
         ),
         'body' => array(
           'value' => '$.bio.text',
