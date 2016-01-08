@@ -978,7 +978,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     $time_diff = time() - $time;
     drush_log('JSE - Configuring person CAP displays: ' . $time_diff . ' seconds', 'ok');
-    
   }
 
 }

@@ -18,10 +18,8 @@ dependencies[] = always_visible
 dependencies[] = menu_attributes
 dependencies[] = content_access
 dependencies[] = contextual_view_modes
-dependencies[] = contextual_view_modes_nodes
 
 # Stanford Stuff
-dependencies[] = stanford_person_cap
 dependencies[] = stanford_private_page
 dependencies[] = stanford_private_page_access
 dependencies[] = stanford_private_page_administration
