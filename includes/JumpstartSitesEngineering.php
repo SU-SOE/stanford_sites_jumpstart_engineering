@@ -976,7 +976,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     t('Context for people pages using CAP fields');
     t('People');
 
-    $context->save();
+    context_save($context);
 
     $time_diff = time() - $time;
     drush_log('JSE - Configuring person CAP displays: ' . $time_diff . ' seconds', 'ok');
