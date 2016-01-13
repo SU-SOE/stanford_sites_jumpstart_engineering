@@ -17,6 +17,7 @@ base = stanford_sites_jumpstart_academic
 dependencies[] = always_visible
 dependencies[] = menu_attributes
 dependencies[] = content_access
+dependencies[] = contextual_view_modes
 
 # Stanford Stuff
 dependencies[] = stanford_private_page
