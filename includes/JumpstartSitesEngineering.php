@@ -67,11 +67,11 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
-    $tasks['jse_remove_main_menu_items'] = array(
+    $tasks['jse_hide_main_menu_items'] = array(
       'display_name' => st('Remove already installed JSE main menu items.'),
       'display' => FALSE,
       'type' => 'normal',
-      'function' => 'jse_remove_main_menu_items',
+      'function' => 'jse_hide_main_menu_items',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
@@ -272,14 +272,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
   }
 
   /**
-   * Removes already installed items from the Main menu for JSE.
+   * Hides already installed items from the Main menu for JSE.
    *
    * @param [type] $install_state
    *
    */
-  public function jse_remove_main_menu_items(&$install_state) {
+  public function jse_hide_main_menu_items(&$install_state) {
     $time = time();
-    drush_log('JSE - Start removing already installed Main menu items', 'ok');
+    drush_log('JSE - Start hiding already installed Main menu items', 'ok');
     $items = array();
 
     // Rebuild the menu cache before starting this.
@@ -298,7 +298,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     }
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished removing Main Menu items: ' . $time_diff . ' seconds', 'ok');
+    drush_log('JSE - Finished hiding Main Menu items: ' . $time_diff . ' seconds', 'ok');
   }
 
 /**
