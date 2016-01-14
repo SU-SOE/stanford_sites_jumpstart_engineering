@@ -248,6 +248,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'weight' => -50,
     );
 
+    // Add Courses page to the menu
+    /* $items['courses'] = array(
+      'link_path' => drupal_get_normal_path('courses'),
+      'link_title' => 'Courses',
+      'menu_name' => 'main-menu',
+      'weight' => -8,
+    );
+    */
     // Loop through each of the items and save them.
     foreach ($items as $k => $v) {
 
@@ -288,9 +296,20 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     menu_rebuild();
 
     $links = menu_load_links('main-menu');
-    var_dump($links);
+
+    // Hide Academics.
     foreach ($links as $item) {
       if ($item['link_path'] == drupal_get_normal_path('academics')) {
+        $item['hidden'] = 1;
+        menu_link_save($item);
+        menu_cache_clear('main-menu');
+        break;
+      }
+    }
+
+    // Hide Courses.
+    foreach ($links as $item) {
+      if ($item['link_path'] == drupal_get_normal_path('courses')) {
         $item['hidden'] = 1;
         menu_link_save($item);
         menu_cache_clear('main-menu');
