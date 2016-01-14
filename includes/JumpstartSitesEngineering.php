@@ -288,8 +288,9 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     menu_rebuild();
 
     $links = menu_load_links('main-menu');
+    var_dump($links);
     foreach ($links as $item) {
-      if ($item['link_path'] == 'academics') {
+      if ($item['link_path'] == drupal_get_normal_path('academics')) {
         $item['hidden'] = 1;
         menu_link_save($item);
         menu_cache_clear('main-menu');
