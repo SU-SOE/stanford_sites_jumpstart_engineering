@@ -67,6 +67,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_remove_main_menu_items'] = array(
+      'display_name' => st('Remove already installed JSE main menu items.'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'jse_remove_main_menu_items',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $tasks['jse_configure_capx'] = array(
       'display_name' => st('Create CAPx default configuration.'),
       'display' => FALSE,
@@ -232,7 +240,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'plid' => $plid[0], // must be saved prior to contact item.
     );
 
-    // Research
+    // Add Research to the menu
     $items['research'] = array(
       'link_path' => drupal_get_normal_path('research'),
       'link_title' => 'Research',
@@ -264,6 +272,36 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
   }
 
   /**
+   * Removes already installed items from the Main menu for JSE.
+   *
+   * @param [type] $install_state
+   *
+   */
+  public function jse_remove_main_menu_items(&$install_state) {
+    $time = time();
+    drush_log('JSE - Start removing already installed Main menu items', 'ok');
+    $items = array();
+
+    // Rebuild the menu cache before starting this.
+    drupal_static_reset();
+    menu_cache_clear_all();
+    menu_rebuild();
+
+    $links = menu_load_links('main-menu');
+    foreach ($links as $item) {
+      if ($item['link_path'] == 'academics') {
+        $item['hidden'] = 1;
+        menu_link_save($item);
+        menu_cache_clear('main-menu');
+        break;
+      }
+    }
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished removing Main Menu items: ' . $time_diff . ' seconds', 'ok');
+  }
+
+/**
    * Installs and configures the Private Pages Section menu for JSE.
    *
    * @param [type] $install_state
