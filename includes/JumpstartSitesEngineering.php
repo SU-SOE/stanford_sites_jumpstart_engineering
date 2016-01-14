@@ -232,6 +232,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'plid' => $plid[0], // must be saved prior to contact item.
     );
 
+    // Research
+    $items['research'] = array(
+      'link_path' => drupal_get_normal_path('research'),
+      'link_title' => 'Research',
+      'menu_name' => 'main-menu',
+      'weight' => -50,
+    );
+
     // Loop through each of the items and save them.
     foreach ($items as $k => $v) {
 
