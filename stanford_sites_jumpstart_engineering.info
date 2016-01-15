@@ -39,6 +39,10 @@ dependencies[] = stanford_affiliate_organization_views
 ;dependencies[] = stanford_related_publication
 dependencies[] = stanford_capx
 dependencies[] = capx_auto_nodetitle
+prohibit[] = stanford_courses
+prohibit[] = stanford_courses_administration
+prohibit[] = stanford_courses_person_reference
+prohibit[] = stanford_courses_person_reference_views
 
 # Prohibit prior dependencies
 ; ----------------
