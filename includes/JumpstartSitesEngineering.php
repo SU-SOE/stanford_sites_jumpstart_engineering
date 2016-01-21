@@ -123,6 +123,16 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_configure_jse_pical_people_pages'] = array(
+      'display_name' => st('Configure the PICAL people pages'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'configure_jse_pical_people_pages',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
+
+
     // Do the prefixing stuff.
     $this->prepare_tasks($tasks, get_class());
 
@@ -1037,6 +1047,19 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     $time_diff = time() - $time;
     drush_log('JSE - Configuring person CAP displays: ' . $time_diff . ' seconds', 'ok');
+  }
+
+  public function configure_jse_pical_people_pages(&$install_state) {
+    $time = time();
+    drush_log('JSE - Configuring PICAL people pages.' . $time, 'ok');
+
+    // Disable this context - We don't want the "Why I teach block".
+    unset($enabled['people_faculty']);
+
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished configuring JSE PICAL people pages: ' . $time_diff . ' seconds', 'ok');
+
   }
 
 }
