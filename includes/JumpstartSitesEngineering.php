@@ -62,6 +62,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_menu_rules'] = array(
+      'display_name' => st('Set JSE Menu Rules'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'jse_menu_rules',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $tasks['jse_install_pps_menu_items'] = array(
       'display_name' => st('Install private pages section menu items.'),
       'display' => FALSE,
@@ -1074,10 +1082,15 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     drush_log('JSE - Finished configuring JSE PICAL people pages: ' . $time_diff . ' seconds', 'ok');
 
   }
+
+  /**
+   * Puts the menus in place after import.
+   * @param  [array] $install_state [the current installation state]
+   */
   public function position_jse_menus(&$install_state) {
 
     $time = time();
-    drush_log('JSE - Starting menu position task.' . $time, 'ok');
+    drush_log('JSE - Starting menu position task.', 'ok');
 
     // Menu imports process does not find any paths from views defined in
     // features at this point. We will need to make it aware of them before
@@ -1138,8 +1151,166 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     }
 
     $time_diff = time() - $time;
-    drush_log('JSE - Finished menu position task.' . $time_diff . ' seconds', 'ok');
+    drush_log('JSE - Finished menu position task ' . $time_diff . ' seconds.', 'ok');
 
   }
 
+  /**
+   * Insert the menu rules.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function jse_menu_rules(&$install_state) {
+
+    $time = time();
+    drush_log('JSE - Starting menu rules');
+
+    // Define the rules.
+    $rules = array();
+    $rules[] = array(
+      'link_title' => 'About',
+      'admin_title' => 'About by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'about/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Research',
+      'admin_title' => 'Research by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'research/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_news_item' => 'stanford_news_item',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'news/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Events',
+      'admin_title' => 'Events by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_event' => 'stanford_event',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Events',
+      'admin_title' => 'Events by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'events/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'People by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_person' => 'stanford_person',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'People by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'people/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Publications',
+      'admin_title' => 'Publications by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_publication' => 'stanford_publication',
+          ),
+        ),
+      ),
+    );
+    $vocabulary = taxonomy_vocabulary_machine_name_load('stanford_faculty_type');
+    $vid = $vocabulary->vid;
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'Faculty by taxonomy',
+      'conditions' => array(
+        'taxonomy' => array(
+          'vid' => $vid,
+          'tid' => array(),
+        ),
+      ),
+    );
+    $vocabulary = taxonomy_vocabulary_machine_name_load('stanford_staff_type');
+    $vid = $vocabulary->vid;
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'Staff by taxonomy',
+      'conditions' => array(
+        'taxonomy' => array(
+          'vid' => $vid,
+          'tid' => array(),
+        ),
+      ),
+    );
+    $vocabulary = taxonomy_vocabulary_machine_name_load('stanford_student_type');
+    $vid = $vocabulary->vid;
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'Students by taxonomy',
+      'conditions' => array(
+        'taxonomy' => array(
+          'vid' => $vid,
+          'tid' => array(),
+        ),
+      ),
+    );
+    $vocabulary = taxonomy_vocabulary_machine_name_load('news_categories');
+    $vid = $vocabulary->vid;
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by taxonomy',
+      'conditions' => array(
+        'taxonomy' => array(
+          'vid' => $vid,
+          'tid' => array(),
+        ),
+      ),
+    );
+
+    foreach ($rules as $mp_rule) {
+      $this->insert_menu_rule($mp_rule);
+    }
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished menu rules ' . $time_diff . ' seconds.', 'ok');
+
+  }
 }
