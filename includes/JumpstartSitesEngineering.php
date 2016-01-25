@@ -27,6 +27,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     // Unset this so we can build the JSE menu.
     unset($parent_tasks['stanford_sites_jumpstart_academic_position_menus']);
+    unset($parent_tasks['stanford_sites_jumpstart_academic_menu_rules']);
 
     // Remove some parent tasks.
     // JSE adds content to the site that is different from JSA. Lets
