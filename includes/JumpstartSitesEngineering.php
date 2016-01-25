@@ -25,6 +25,9 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Get parent tasks.
     $parent_tasks = parent::get_install_tasks($install_state);
 
+    // Unset this so we can build the JSE menu.
+    unset($parent_tasks['stanford_sites_jumpstart_academic_position_menus']);
+
     // Remove some parent tasks.
     // JSE adds content to the site that is different from JSA. Lets
     // disable those modules and add in only the ones we want again.
@@ -51,6 +54,14 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_position_jse_menus'] = array(
+      'display_name' => st('Position Imported JSE Menus.'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'position_jse_menus',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $tasks['jse_install_pps_menu_items'] = array(
       'display_name' => st('Install private pages section menu items.'),
       'display' => FALSE,
@@ -58,7 +69,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'function' => 'install_private_pages_section_menu_items',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
-
+/*
     $tasks['jse_install_main_menu_items'] = array(
       'display_name' => st('Install JSE main menu items.'),
       'display' => FALSE,
@@ -74,7 +85,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'function' => 'jse_hide_main_menu_items',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
-
+*/
     $tasks['jse_configure_capx'] = array(
       'display_name' => st('Create CAPx default configuration.'),
       'display' => FALSE,
@@ -1061,6 +1072,73 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     $time_diff = time() - $time;
     drush_log('JSE - Finished configuring JSE PICAL people pages: ' . $time_diff . ' seconds', 'ok');
+
+  }
+  public function position_jse_menus(&$install_state) {
+
+    $time = time();
+    drush_log('JSE - Starting menu position task.' . $time, 'ok');
+
+    // Menu imports process does not find any paths from views defined in
+    // features at this point. We will need to make it aware of them before
+    // trying to import the menus links. Menu import uses drupal_valid_path() in
+    // order to determine if a path is valid. drupal_valid_path() looks into the
+    // menu router table for paths. At this point the menu_router table does not
+    // have any views urls.
+    $this->save_all_default_views_to_db($install_state);
+    $items = array();
+
+    // Rebuild the menu cache before starting this.
+    drupal_static_reset();
+    menu_cache_clear_all();
+    menu_rebuild();
+
+    // For the save of this file broke out the list of items into own file.
+    $path_to_file = drupal_get_path('profile', 'stanford_sites_jumpstart_engineering') . "/includes/menus/menu-items.php";
+    include_once $path_to_file;
+    $items[] = $main_menu;
+    $items[] = $footer_about;
+    $items[] = $footer_academics;
+    $items[] = $footer_news_events;
+    $items[] = $footer_people;
+
+    // Loop through each of the items and save them.
+    foreach ($items as $index_one => $item) {
+      foreach($item as $k => $v) {
+        // Check to see if there is a parent declaration. If there is then find
+        // the mlid of the parent item and attach it to the menu item being saved.
+        if (isset($v['parent'])) {
+          $v['plid'] = $item[$v['parent']]['mlid'];
+          unset($v['parent']); // Remove fluff before save.
+        }
+
+        // Save the menu item.
+        $mlid = menu_link_save($v);
+        $v['mlid'] = $mlid;
+        $item[$k] = $v;
+      }
+    }
+
+    drush_log('JSE - Finished creating menu items', 'ok');
+
+    // The home link weight needs to change.
+
+    $home_search = db_select('menu_links', 'ml')
+      ->fields('ml', array('mlid'))
+      ->condition('menu_name', 'main-menu')
+      ->condition('link_path', '<front>')
+      ->condition('link_title', 'Home')
+      ->execute()
+      ->fetchAssoc();
+
+    if (is_numeric($home_search['mlid'])) {
+      $menu_link = menu_link_load($home_search['mlid']);
+      $menu_link['weight'] = -50;
+      menu_link_save($menu_link);
+    }
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished menu position task.' . $time_diff . ' seconds', 'ok');
 
   }
 
