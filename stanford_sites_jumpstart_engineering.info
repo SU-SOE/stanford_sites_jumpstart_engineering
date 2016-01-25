@@ -21,7 +21,6 @@ dependencies[] = contextual_view_modes
 
 # Stanford Stuff
 dependencies[] = stanford_private_page
-dependencies[] = stanford_private_page_access
 dependencies[] = stanford_private_page_administration
 dependencies[] = stanford_private_page_section
 dependencies[] = stanford_jumpstart_engineering
