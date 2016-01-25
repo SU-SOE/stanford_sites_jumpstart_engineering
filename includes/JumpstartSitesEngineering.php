@@ -1053,9 +1053,11 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time = time();
     drush_log('JSE - Configuring PICAL people pages.' . $time, 'ok');
 
-    // Disable this context - We don't want the "Why I teach block".
-    unset($enabled['people_faculty']);
+    $context_status = variable_get('context_status', array());
 
+    // Disable this context - We don't want the "Why I teach block".
+    $context_status['people_faculty'] = TRUE;
+    variable_set('context_status', $context_status);
 
     $time_diff = time() - $time;
     drush_log('JSE - Finished configuring JSE PICAL people pages: ' . $time_diff . ' seconds', 'ok');
