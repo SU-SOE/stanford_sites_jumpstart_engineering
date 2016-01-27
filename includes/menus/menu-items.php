@@ -152,7 +152,7 @@ $main_menu['about'] = array(
     'link_path' => drupal_get_normal_path('about/about-us'),
     'link_title' => 'Overview',
     'menu_name' => 'main-menu',
-    'weight' => -10,
+    'weight' => -12,
     'parent' => 'about', // must be saved prior to overview item.
   );
   // About / location
@@ -160,7 +160,7 @@ $main_menu['about'] = array(
     'link_path' => drupal_get_normal_path('about/location'),
     'link_title' => 'Location',
     'menu_name' => 'main-menu',
-    'weight' => -8,
+    'weight' => -10,
     'parent' => 'about', // must be saved prior to contact item.
   );
   // About / Contact
@@ -168,13 +168,21 @@ $main_menu['about'] = array(
     'link_path' => drupal_get_normal_path('about/contact'),
     'link_title' => 'Contact',
     'menu_name' => 'main-menu',
-    'weight' => -6,
+    'weight' => -8,
     'parent' => 'about', // must be saved prior to web-access item.
   );
   // About / affiliated-programs
   $main_menu['about/affiliated-programs'] = array(
     'link_path' => drupal_get_normal_path('about/affiliated-programs'),
     'link_title' => 'Affiliated Programs',
+    'menu_name' => 'main-menu',
+    'weight' => -6,
+    'parent' => 'about', // must be saved prior to contact item.
+  );
+  // About / affiliate-organization
+  $main_menu['about/affiliate-organization'] = array(
+    'link_path' => drupal_get_normal_path('about/affiliate-organizations'),
+    'link_title' => 'Affiliate Organizations',
     'menu_name' => 'main-menu',
     'weight' => -4,
     'parent' => 'about', // must be saved prior to contact item.
