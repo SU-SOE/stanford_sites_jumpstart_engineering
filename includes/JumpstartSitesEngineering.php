@@ -25,6 +25,10 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Get parent tasks.
     $parent_tasks = parent::get_install_tasks($install_state);
 
+    // Unset these from JSA so we can build the JSE menu.
+    unset($parent_tasks['JumpstartSitesAcademic_stanford_sites_jumpstart_academic_position_menus']);
+    unset($parent_tasks['JumpstartSitesAcademic_stanford_sites_jumpstart_academic_menu_rules']);
+
     // Remove some parent tasks.
     // JSE adds content to the site that is different from JSA. Lets
     // disable those modules and add in only the ones we want again.
@@ -51,19 +55,27 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jse_position_jse_menus'] = array(
+      'display_name' => st('Position Imported JSE Menus.'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'position_jse_menus',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
+    $tasks['jse_menu_rules'] = array(
+      'display_name' => st('Set JSE Menu Rules'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'jse_menu_rules',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $tasks['jse_install_pps_menu_items'] = array(
       'display_name' => st('Install private pages section menu items.'),
       'display' => FALSE,
       'type' => 'normal',
       'function' => 'install_private_pages_section_menu_items',
-      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-    );
-
-    $tasks['jse_install_main_menu_items'] = array(
-      'display_name' => st('Install JSE main menu items.'),
-      'display' => FALSE,
-      'type' => 'normal',
-      'function' => 'jse_install_main_menu_items',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
@@ -114,6 +126,16 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'function' => 'configure_person_cap_display',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
+
+    $tasks['jse_configure_jse_pical_people_pages'] = array(
+      'display_name' => st('Configure the PICAL people pages'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'configure_jse_pical_people_pages',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
+
 
     // Do the prefixing stuff.
     $this->prepare_tasks($tasks, get_class());
@@ -178,81 +200,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       drush_log('JSE - Lock not acquired; no content imported', 'error');
     }
 
-  }
-
-  /**
-   * Installs and configures the Main menu items for JSE.
-   *
-   * @param [type] $install_state
-   *   Description.
-   */
-  public function jse_install_main_menu_items(&$install_state) {
-    $time = time();
-    drush_log('JSE - Start creating Main menu items', 'ok');
-    $items = array();
-
-    // Rebuild the menu cache before starting this.
-    drupal_static_reset();
-    menu_cache_clear_all();
-    menu_rebuild();
-
-    // Get nid for the "About" node
-    $nid = array();
-    $db_info = db_select('node', 'n')
-      ->condition('n.title', 'About')
-      ->fields('n', array('nid'))
-      ->execute()
-      ->fetchAll();
-
-    foreach ($db_info as $key => $value){
-      $nid[] = $db_info[$key]->nid;
-    }
-
-    // Get the parent link id for the "About" menu item
-    $plid = array();
-    $parent = 'node/' . $nid[0];
-    $menu_name = 'main-menu';
-    $menu_info = db_select('menu_links', 'ml')
-      ->condition('ml.link_path', $parent)
-      ->condition('ml.menu_name', $menu_name)
-      ->fields('ml', array('mlid', 'plid'))
-      ->execute()
-      ->fetchAll();
-
-    foreach ($menu_info as $key => $value) {
-      $plid[] = $menu_info[$key]->mlid;
-    }
-
-    // About / affiliate-organizations
-    $items['about/affiliate-organization'] = array(
-      'link_path' => drupal_get_normal_path('about/affiliate-organizations'),
-      'link_title' => 'Affiliate Organizations',
-      'menu_name' => 'main-menu',
-      'weight' => -5,
-      'plid' => $plid[0], // must be saved prior to contact item.
-    );
-
-    // Loop through each of the items and save them.
-    foreach ($items as $k => $v) {
-
-      // Check to see if there is a parent declaration. If there is then find
-      // the mlid of the parent item and attach it to the menu item being saved.
-
-      if (!isset($v['plid'])) {
-        if (isset($v['parent'])) {
-          $v['plid'] = $items[$v['parent']]['mlid'];
-          unset($v['parent']); // Remove fluff before save.
-        }
-      }
-
-      // Save the menu item.
-      $mlid = menu_link_save($v);
-      $v['mlid'] = $mlid;
-      $items[$k] = $v;
-    }
-
-    $time_diff = time() - $time;
-    drush_log('JSE - Finished creating Main Menu items: ' . $time_diff . ' seconds', 'ok');
   }
 
   /**
@@ -982,4 +929,249 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     drush_log('JSE - Configuring person CAP displays: ' . $time_diff . ' seconds', 'ok');
   }
 
+  public function configure_jse_pical_people_pages(&$install_state) {
+    $time = time();
+    drush_log('JSE - Configuring PICAL people pages.' . $time, 'ok');
+
+    $context_status = variable_get('context_status', array());
+
+    // Disable this context - We don't want the "Why I teach block".
+    $context_status['people_faculty'] = TRUE;
+    variable_set('context_status', $context_status);
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished configuring JSE PICAL people pages: ' . $time_diff . ' seconds', 'ok');
+
+  }
+
+  /**
+   * Puts the menus in place after import.
+   * @param  [array] $install_state [the current installation state]
+   */
+  public function position_jse_menus(&$install_state) {
+
+    $time = time();
+    drush_log('JSE - Starting menu position task.', 'ok');
+
+    // Menu imports process does not find any paths from views defined in
+    // features at this point. We will need to make it aware of them before
+    // trying to import the menus links. Menu import uses drupal_valid_path() in
+    // order to determine if a path is valid. drupal_valid_path() looks into the
+    // menu router table for paths. At this point the menu_router table does not
+    // have any views urls.
+    $this->save_all_default_views_to_db($install_state);
+    $items = array();
+
+    // Rebuild the menu cache before starting this.
+    drupal_static_reset();
+    menu_cache_clear_all();
+    menu_rebuild();
+
+    // For the save of this file broke out the list of items into own file.
+    $path_to_file = drupal_get_path('profile', 'stanford_sites_jumpstart_engineering') . "/includes/menus/menu-items.php";
+    include_once $path_to_file;
+    $items[] = $main_menu;
+    $items[] = $footer_about;
+    $items[] = $footer_academics;
+    $items[] = $footer_news_events;
+    $items[] = $footer_people;
+
+    // Loop through each of the items and save them.
+    foreach ($items as $index_one => $item) {
+      foreach($item as $k => $v) {
+        // Check to see if there is a parent declaration. If there is then find
+        // the mlid of the parent item and attach it to the menu item being saved.
+        if (isset($v['parent'])) {
+          $v['plid'] = $item[$v['parent']]['mlid'];
+          unset($v['parent']); // Remove fluff before save.
+        }
+
+        // Save the menu item.
+        $mlid = menu_link_save($v);
+        $v['mlid'] = $mlid;
+        $item[$k] = $v;
+      }
+    }
+
+    drush_log('JSE - Finished creating menu items', 'ok');
+
+    // The home link weight needs to change.
+
+    $home_search = db_select('menu_links', 'ml')
+      ->fields('ml', array('mlid'))
+      ->condition('menu_name', 'main-menu')
+      ->condition('link_path', '<front>')
+      ->condition('link_title', 'Home')
+      ->execute()
+      ->fetchAssoc();
+
+    if (is_numeric($home_search['mlid'])) {
+      $menu_link = menu_link_load($home_search['mlid']);
+      $menu_link['weight'] = -50;
+      menu_link_save($menu_link);
+    }
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished menu position task ' . $time_diff . ' seconds.', 'ok');
+
+  }
+
+  /**
+   * Insert the menu rules.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function jse_menu_rules(&$install_state) {
+
+    $time = time();
+    drush_log('JSE - Starting menu rules');
+
+    // Define the rules.
+    $rules = array();
+    $rules[] = array(
+      'link_title' => 'About',
+      'admin_title' => 'About by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'about/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Research',
+      'admin_title' => 'Research by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'research/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_news_item' => 'stanford_news_item',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'news/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Events',
+      'admin_title' => 'Events by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_event' => 'stanford_event',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Events',
+      'admin_title' => 'Events by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'events/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'People by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_person' => 'stanford_person',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'People by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'people/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Publications',
+      'admin_title' => 'Publications by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_publication' => 'stanford_publication',
+          ),
+        ),
+      ),
+    );
+    $vocabulary = taxonomy_vocabulary_machine_name_load('stanford_faculty_type');
+    $vid = $vocabulary->vid;
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'Faculty by taxonomy',
+      'conditions' => array(
+        'taxonomy' => array(
+          'vid' => $vid,
+          'tid' => array(),
+        ),
+      ),
+    );
+    $vocabulary = taxonomy_vocabulary_machine_name_load('stanford_staff_type');
+    $vid = $vocabulary->vid;
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'Staff by taxonomy',
+      'conditions' => array(
+        'taxonomy' => array(
+          'vid' => $vid,
+          'tid' => array(),
+        ),
+      ),
+    );
+    $vocabulary = taxonomy_vocabulary_machine_name_load('stanford_student_type');
+    $vid = $vocabulary->vid;
+    $rules[] = array(
+      'link_title' => 'People',
+      'admin_title' => 'Students by taxonomy',
+      'conditions' => array(
+        'taxonomy' => array(
+          'vid' => $vid,
+          'tid' => array(),
+        ),
+      ),
+    );
+    $vocabulary = taxonomy_vocabulary_machine_name_load('news_categories');
+    $vid = $vocabulary->vid;
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by taxonomy',
+      'conditions' => array(
+        'taxonomy' => array(
+          'vid' => $vid,
+          'tid' => array(),
+        ),
+      ),
+    );
+
+    foreach ($rules as $mp_rule) {
+      $this->insert_menu_rule($mp_rule);
+    }
+
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished menu rules ' . $time_diff . ' seconds.', 'ok');
+
+  }
 }
