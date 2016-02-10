@@ -4,77 +4,153 @@
 // MAIN MENU
 // /////////////////////////////////////////////////////////////////////////////
 
-// Research
-$main_menu['research'] = array(
-  'link_path' => drupal_get_normal_path('research'),
-  'link_title' => 'Research',
+// About
+$main_menu['about'] = array(
+  'link_path' => drupal_get_normal_path('about'),
+  'link_title' => 'About',
   'menu_name' => 'main-menu',
-  'weight' => -48,
-  'customized' => 1,
+  'weight' => -20,
+);
+// About / Mission
+$main_menu['about/mission'] = array(
+  'link_path' => drupal_get_normal_path('about/mission'),
+  'link_title' => 'Mission',
+  'menu_name' => 'main-menu',
+  'weight' => -12,
+  'parent' => 'about', // must be saved prior to overview item.
+);
+// About / affiliated-programs
+$main_menu['about/affiliated-programs'] = array(
+  'link_path' => drupal_get_normal_path('about/affiliated-programs'),
+  'link_title' => 'Programs',
+  'menu_name' => 'main-menu',
+  'weight' => -10,
+  'parent' => 'about', // must be saved prior to contact item.
+);
+// About / affiliate-organization
+$main_menu['about/affiliate-organization'] = array(
+  'link_path' => drupal_get_normal_path('about/affiliate-organizations'),
+  'link_title' => 'Affiliates',
+  'menu_name' => 'main-menu',
+  'weight' => -8,
+  'parent' => 'about', // must be saved prior to contact item.
 );
 // Courses
 $main_menu['courses'] = array(
   'link_path' => drupal_get_normal_path('courses'),
   'link_title' => 'Courses',
   'menu_name' => 'main-menu',
-  'weight' => -8,
-  'customized' => 1,
+  'weight' => -6,
+  'parent' => 'about', // must be saved prior to web-access item.
 );
+// About / Contact
+$main_menu['about/contact'] = array(
+  'link_path' => drupal_get_normal_path('about/contact'),
+  'link_title' => 'Contact',
+  'menu_name' => 'main-menu',
+  'weight' => -4,
+  'parent' => 'about', // must be saved prior to web-access item.
+);
+
 // People
 $main_menu['people'] = array(
   'link_path' => drupal_get_normal_path('people'),
   'link_title' => 'People',
   'menu_name' => 'main-menu',
-  'weight' => -7,
+  'weight' => -16,
 );
-  // Faculty
-  $main_menu['people/faculty'] = array(
-    'link_path' => drupal_get_normal_path('people/faculty'),
-    'link_title' => 'Faculty',
-    'menu_name' => 'main-menu',
-    'weight' => -10,
-    'customized' => 1,
-    'parent' => 'people',
-  );
-  // Faculty
-  $main_menu['people/students'] = array(
-    'link_path' => drupal_get_normal_path('people/students'),
-    'link_title' => 'Students',
-    'menu_name' => 'main-menu',
-    'weight' => -8,
-    'customized' => 1,
-    'parent' => 'people',
-  );
-  // Staff
-  $main_menu['people/staff'] = array(
-    'link_path' => drupal_get_normal_path('people/staff'),
-    'link_title' => 'Staff',
-    'menu_name' => 'main-menu',
-    'weight' => -6,
-    'customized' => 1,
-    'parent' => 'people',
-  );
+// People / People
+$main_menu['people/all/grid'] = array(
+  'link_path' => drupal_get_normal_path('people/all/grid'),
+  'link_title' => 'People',
+  'menu_name' => 'main-menu',
+  'weight' => -12,
+  'customized' => 1,
+  'parent' => 'people',
+);
+// People / Faculty
+$main_menu['people/faculty'] = array(
+  'link_path' => drupal_get_normal_path('people/faculty'),
+  'link_title' => 'Faculty',
+  'menu_name' => 'main-menu',
+  'weight' => -10,
+  'customized' => 1,
+  'parent' => 'people',
+);
+// People / Students
+$main_menu['people/students'] = array(
+  'link_path' => drupal_get_normal_path('people/students'),
+  'link_title' => 'Students',
+  'menu_name' => 'main-menu',
+  'weight' => -8,
+  'customized' => 1,
+  'parent' => 'people',
+);
+// People / Staff
+$main_menu['people/staff'] = array(
+  'link_path' => drupal_get_normal_path('people/staff'),
+  'link_title' => 'Staff',
+  'menu_name' => 'main-menu',
+  'weight' => -6,
+  'customized' => 1,
+  'parent' => 'people',
+);
+
+// Research
+$main_menu['research'] = array(
+  'link_path' => drupal_get_normal_path('research'),
+  'link_title' => 'Research',
+  'menu_name' => 'main-menu',
+  'weight' => -12,
+  'customized' => 1,
+);
+$main_menu['research/overview'] = array(
+  'link_path' => drupal_get_normal_path('research/overview'),
+  'link_title' => 'Research Overview',
+  'menu_name' => 'main-menu',
+  'weight' => -10,
+  'customized' => 1,
+  'parent' => 'research',
+);
+$main_menu['research/research-example'] = array(
+  'link_path' => drupal_get_normal_path('research/research-example'),
+  'link_title' => 'Research Example',
+  'menu_name' => 'main-menu',
+  'weight' => -8,
+  'customized' => 1,
+  'parent' => 'research',
+);
+$main_menu['research/program-example'] = array(
+  'link_path' => drupal_get_normal_path('research/rogram-example'),
+  'link_title' => 'Program Overview',
+  'menu_name' => 'main-menu',
+  'weight' => -6,
+  'customized' => 1,
+  'parent' => 'research',
+);
+
 // Publications
 $main_menu['publications'] = array(
   'link_path' => drupal_get_normal_path('publications'),
   'link_title' => 'Publications',
   'menu_name' => 'main-menu',
-  'weight' => -6,
+  'weight' => -10,
   'customized' => 1,
 );
+
 // News Landing
 $main_menu['news'] = array(
   'link_path' => drupal_get_normal_path('news'),
   'link_title' => 'News',
   'menu_name' => 'main-menu',
-  'weight' => -5,
+  'weight' => -8,
 );
   // News / Recent News
   $main_menu['news/recent-news'] = array(
     'link_path' => 'news/recent-news',
     'link_title' => 'Recent News',
     'menu_name' => 'main-menu',
-    'weight' => -9,
+    'weight' => -10,
     'parent' => 'news',
     'customized' => 1,
   );
@@ -91,15 +167,25 @@ $main_menu['news'] = array(
     'link_path' => drupal_get_normal_path('news/subscribe'),
     'link_title' => 'Subscribe',
     'menu_name' => 'main-menu',
-    'weight' => -7,
+    'weight' => -6,
     'parent' => 'news',
   );
-// Events Landing
+  // News / Gallery
+  $main_menu['news/gallery'] = array(
+    'link_path' => drupal_get_normal_path('news/gallery'),
+    'link_title' => 'Gallery',
+    'menu_name' => 'main-menu',
+    'weight' => -4,
+    'parent' => 'news',
+    'customized' => 1,
+  );
+
+// Events
 $main_menu['events'] = array(
   'link_path' => drupal_get_normal_path('events'),
   'link_title' => 'Events',
   'menu_name' => 'main-menu',
-  'weight' => -4,
+  'weight' => -6,
 );
   // Events / Upcoming
   $main_menu['events/upcoming-events'] = array(
@@ -116,7 +202,7 @@ $main_menu['events'] = array(
     'link_path' => 'events/past-events',
     'link_title' => 'Past Events',
     'menu_name' => 'main-menu',
-    'weight' => -9,
+    'weight' => -8,
     'parent' => 'events',
     'router_path' => 'events/past-events',
     'customized' => 1,
@@ -126,83 +212,45 @@ $main_menu['events'] = array(
     'link_path' => 'events/series',
     'link_title' => 'Event Series',
     'menu_name' => 'main-menu',
-    'weight' => -8,
+    'weight' => -6,
     'parent' => 'events',
     'router_path' => 'events/series',
     'customized' => 1,
   );
-  // Gallery
-  $main_menu['news/gallery'] = array(
-    'link_path' => drupal_get_normal_path('news/gallery'),
-    'link_title' => 'Gallery',
-    'menu_name' => 'main-menu',
-    'weight' => -6,
-    'parent' => 'news',
-    'customized' => 1,
-  );
-// About
-$main_menu['about'] = array(
-  'link_path' => drupal_get_normal_path('about'),
-  'link_title' => 'About',
+
+// Resources
+$main_menu['resources'] = array(
+  'link_path' => drupal_get_normal_path('resources'),
+  'link_title' => 'Resources',
   'menu_name' => 'main-menu',
-  'weight' => -2,
+  'weight' => -4,
 );
-// About / Overview
-  $main_menu['about/overview'] = array(
-    'link_path' => drupal_get_normal_path('about/about-us'),
-    'link_title' => 'Overview',
-    'menu_name' => 'main-menu',
-    'weight' => -12,
-    'parent' => 'about', // must be saved prior to overview item.
-  );
-  // About / location
-  $main_menu['about/location'] = array(
-    'link_path' => drupal_get_normal_path('about/location'),
-    'link_title' => 'Location',
-    'menu_name' => 'main-menu',
-    'weight' => -10,
-    'parent' => 'about', // must be saved prior to contact item.
-  );
-  // About / Contact
-  $main_menu['about/contact'] = array(
-    'link_path' => drupal_get_normal_path('about/contact'),
-    'link_title' => 'Contact',
-    'menu_name' => 'main-menu',
-    'weight' => -8,
-    'parent' => 'about', // must be saved prior to web-access item.
-  );
-  // About / affiliated-programs
-  $main_menu['about/affiliated-programs'] = array(
-    'link_path' => drupal_get_normal_path('about/affiliated-programs'),
-    'link_title' => 'Affiliated Programs',
-    'menu_name' => 'main-menu',
-    'weight' => -6,
-    'parent' => 'about', // must be saved prior to contact item.
-  );
-  // About / affiliate-organization
-  $main_menu['about/affiliate-organization'] = array(
-    'link_path' => drupal_get_normal_path('about/affiliate-organizations'),
-    'link_title' => 'Affiliate Organizations',
-    'menu_name' => 'main-menu',
-    'weight' => -4,
-    'parent' => 'about', // must be saved prior to contact item.
-  );
-  // About / Make a Gift
-  $main_menu['about/giving'] = array(
-    'link_path' => drupal_get_normal_path('about/giving'),
-    'link_title' => 'Make A Gift',
-    'menu_name' => 'main-menu',
-    'weight' => -2,
-    'parent' => 'about', // must be saved prior to web-access item.
-  );
-  // About / Accessibility
-  // $main_menu['about/web-accessibility'] = array(
-  //   'link_path' => drupal_get_normal_path('about/web-accessibility'),
-  //   'link_title' => 'Web Accessibility',
-  //   'menu_name' => 'main-menu',
-  //   'weight' => 0,
-  //   'parent' => 'about', // must be saved prior to web-access item.
-  // );
+// Resources / Overview
+$main_menu['resources/overview'] = array(
+  'link_path' => drupal_get_normal_path('resources/overview'),
+  'link_title' => 'Resources Overview',
+  'menu_name' => 'main-menu',
+  'weight' => -10,
+  'parent' => 'resources',
+);
+// Resources / Software
+$main_menu['resources/software'] = array(
+  'link_path' => drupal_get_normal_path('resources/software'),
+  'link_title' => 'Software Resources',
+  'menu_name' => 'main-menu',
+  'weight' => -8,
+  'parent' => 'resources',
+);
+// Resources / References
+$main_menu['resources/references'] = array(
+  'link_path' => drupal_get_normal_path('resources/references'),
+  'link_title' => 'References',
+  'menu_name' => 'main-menu',
+  'weight' => -6,
+  'parent' => 'resources',
+);
+
+
 
 // /////////////////////////////////////////////////////////////////////////////
 // Footer Menus
