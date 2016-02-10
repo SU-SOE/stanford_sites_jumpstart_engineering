@@ -121,7 +121,7 @@ $main_menu['research/research-example'] = array(
   'parent' => 'research',
 );
 $main_menu['research/program-example'] = array(
-  'link_path' => drupal_get_normal_path('research/rogram-example'),
+  'link_path' => drupal_get_normal_path('research/program-example'),
   'link_title' => 'Program Overview',
   'menu_name' => 'main-menu',
   'weight' => -6,
