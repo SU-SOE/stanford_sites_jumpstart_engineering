@@ -120,9 +120,9 @@ $main_menu['research/research-example'] = array(
   'customized' => 1,
   'parent' => 'research',
 );
-$main_menu['research/program-example'] = array(
-  'link_path' => drupal_get_normal_path('research/program-example'),
-  'link_title' => 'Program Overview',
+$main_menu['research/project-example'] = array(
+  'link_path' => drupal_get_normal_path('research/project-example'),
+  'link_title' => 'Project Overview',
   'menu_name' => 'main-menu',
   'weight' => -6,
   'customized' => 1,
