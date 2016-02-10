@@ -60,8 +60,8 @@ $main_menu['people'] = array(
   'weight' => -16,
 );
 // People / People
-$main_menu['people/all/grid'] = array(
-  'link_path' => drupal_get_normal_path('people/all/grid'),
+$main_menu['people/all/grid/grouped'] = array(
+  'link_path' => drupal_get_normal_path('people/all/grid/grouped'),
   'link_title' => 'People',
   'menu_name' => 'main-menu',
   'weight' => -12,
@@ -78,8 +78,8 @@ $main_menu['people/faculty'] = array(
   'parent' => 'people',
 );
 // People / Students
-$main_menu['people/students'] = array(
-  'link_path' => drupal_get_normal_path('people/students'),
+$main_menu['people/students/cap-list'] = array(
+  'link_path' => drupal_get_normal_path('people/students/cap-list'),
   'link_title' => 'Students',
   'menu_name' => 'main-menu',
   'weight' => -8,
