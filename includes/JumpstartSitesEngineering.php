@@ -220,7 +220,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
 
     // Create redirects.
     $redirects = array(
-      'academics' => 'research/overview',
+      'research' => 'research/overview',
       'people' => 'people/all/grid/grouped',
       'news' => 'news/recent-news',
       'events' => 'events/upcoming-events',
@@ -267,7 +267,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $time_diff = time() - $time;
     drush_log('JSE - Finished installing redirects. Time: ' . $time_diff . ' seconds' , 'ok');
   }
-  
+
   /**
    * Installs and configures the Private Pages Section menu for JSE.
    *
