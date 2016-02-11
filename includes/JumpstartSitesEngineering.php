@@ -28,6 +28,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Unset these from JSA so we can build the JSE menu.
     unset($parent_tasks['JumpstartSitesAcademic_stanford_sites_jumpstart_academic_position_menus']);
     unset($parent_tasks['JumpstartSitesAcademic_stanford_sites_jumpstart_academic_menu_rules']);
+    unset($parent_tasks['JumpstartSitesAcademic_stanford_sites_jumpstart_academic_install_redirects']);
 
     // Remove some parent tasks.
     // JSE adds content to the site that is different from JSA. Lets
@@ -135,7 +136,13 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
-
+    $tasks['jse_install_jse_redirects'] = array(
+      'display_name' => st('Configure JSE redirects'),
+      'display' => TRUE,
+      'type' => 'normal',
+      'function' => 'install_jse_redirects',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
 
     // Do the prefixing stuff.
     $this->prepare_tasks($tasks, get_class());
@@ -199,9 +206,68 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     else {
       drush_log('JSE - Lock not acquired; no content imported', 'error');
     }
-
   }
 
+  /**
+   * [install_jse_redirects description]
+   * Installs redirects for JSE.
+   * @param  [array] $install_state [the current installation state]
+   * @return [type]                [description]
+   */
+  public function install_jse_redirects(&$install_state) {
+    $time = time();
+    drush_log('JSE - Start installing redirects.', 'ok');
+
+    // Create redirects.
+    $redirects = array(
+      'academics' => 'research/overview',
+      'people' => 'people/all/grid/grouped',
+      'news' => 'news/recent-news',
+      'events' => 'events/upcoming-events',
+      'about' => 'about/mission',
+      'resources' => 'resources/overview',
+    );
+
+    foreach ($redirects as $source => $dest) {
+      $redirect = new stdClass();
+      $source_path = drupal_lookup_path('source', $source);
+
+      if ($source_path == FALSE || $source_path == "<front>" || $source_path == "home") {
+        $source_path = $source;
+      }
+
+      if (drupal_lookup_path('source', $dest)) {
+        $dest = drupal_lookup_path('source', $dest);
+      }
+
+      // Check to see if redirect exists first.
+      $found = redirect_load_by_source($source_path);
+      if (!empty($found)) {
+        // Redirect exists.
+        continue;
+      }
+
+      module_invoke(
+        'redirect',
+        'object_prepare',
+        $redirect,
+        array(
+          'source' => $source_path,
+          'source_options' => array(),
+          'redirect' => $dest,
+          'redirect_options' => array(),
+          'language' => LANGUAGE_NONE,
+        )
+      );
+
+      if ($source_path !== $dest) {
+        module_invoke('redirect', 'save', $redirect);
+      }
+    }
+    $time_diff = time() - $time;
+    drush_log('JSE - Finished installing redirects. Time: ' . $time_diff . ' seconds' , 'ok');
+  }
+  
   /**
    * Installs and configures the Private Pages Section menu for JSE.
    *
