@@ -1037,10 +1037,6 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     $path_to_file = drupal_get_path('profile', 'stanford_sites_jumpstart_engineering') . "/includes/menus/menu-items.php";
     include_once $path_to_file;
     $items[] = $main_menu;
-    $items[] = $footer_about;
-    $items[] = $footer_academics;
-    $items[] = $footer_news_events;
-    $items[] = $footer_people;
 
     // Loop through each of the items and save them.
     foreach ($items as $index_one => $item) {
