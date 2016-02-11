@@ -1113,6 +1113,15 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
       ),
     );
     $rules[] = array(
+      'link_title' => 'Resources',
+      'admin_title' => 'Resources by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'resources/*',
+        ),
+      ),
+    );
+    $rules[] = array(
       'link_title' => 'News',
       'admin_title' => 'News by content type',
       'conditions' => array(
