@@ -157,6 +157,7 @@ class JumpstartSitesEngineering extends JumpstartSitesAcademic {
     // Variables.
     variable_set('stanford_jumpstart_engineering', TRUE);
     variable_del('stanford_jumpstart_academic');
+    variable_del('stanford_jumpstart_help_settings');
     drush_log('JSE - Finished Setting JSE Variables.', 'ok');
   }
 
