@@ -4,7 +4,7 @@ description = Stanford Sites Jumpstart Engineering Installation.
 project = stanford_sites_jumpstart_engineering
 project status url = https://github.com/SU-SOE/stanford_sites_jumpstart_engineering
 core = 7.x
-version = 7.x-1.1
+version = 7.x-1.1-dev
 
 ; Base Profile.
 ; ----------------
