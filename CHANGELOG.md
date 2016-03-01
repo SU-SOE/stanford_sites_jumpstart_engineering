@@ -1,6 +1,10 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
+Stanford Sites Jumpstart Engineering 7.x-1.1+4-dev  2016-02-18
+------------------------------------------------------------
+- SOE-604: update URL for Affiliates
+
 Stanford Sites Jumpstart Engineering 7.x-1.1  2016-02-18
 ------------------------------------------------------------
 - basic-1435: add person_layouts module
