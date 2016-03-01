@@ -27,9 +27,9 @@ $main_menu['about/affiliated-programs'] = array(
   'weight' => -10,
   'parent' => 'about', // must be saved prior to contact item.
 );
-// About / affiliate-organization
-$main_menu['about/affiliate-organization'] = array(
-  'link_path' => drupal_get_normal_path('about/affiliate-organizations'),
+// affiliate-organization
+$main_menu['affiliate-organization'] = array(
+  'link_path' => drupal_get_normal_path('affiliate-organizations'),
   'link_title' => 'Affiliates',
   'menu_name' => 'main-menu',
   'weight' => -8,
