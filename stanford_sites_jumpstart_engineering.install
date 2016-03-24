@@ -7,6 +7,13 @@
 function stanford_sites_jumpstart_engineering_install() {}
 
 /**
+ * Implements hook_install_finished().
+ */
+function stanford_sites_jumpstart_engineering_install_finished() {
+  itasks_install_finished();
+}
+
+/**
  * Implements hook_uninstall().
  */
 function stanford_sites_jumpstart_engineering_uninstall() {}
