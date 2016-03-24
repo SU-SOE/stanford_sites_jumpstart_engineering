@@ -54,18 +54,15 @@ task[install][] = Stanford\Jumpstart\Install\User\HowardUser
 task[install][] = Stanford\Jumpstart\Install\User\LindseyUser
 task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
 
-; JUMPSTART ACADEMIC INSTALL
+; JUMPSTART ENGINEERING INSTALL
+task[install][] = Stanford\JumpstartEngineering\Install\Content\ImportJSENodes
+task[install][] = Stanford\JumpstartEngineering\Install\Content\ImportJSEBeans
+
+; ViewsToDB must run before menu settings.
 task[install][] = Stanford\Utility\Install\ViewsToDB
-task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicVocabularies
-task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicNodes
-task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicBeans
-task[install][] = Stanford\JumpstartAcademic\Install\Menu\MenuRedirects
-task[install][] = Stanford\JumpstartAcademic\Install\Menu\MenuSettings
-task[install][] = Stanford\JumpstartAcademic\Install\Menu\MenuRules
+task[install][] = Stanford\JumpstartEngineering\Install\Menu\JSEMenuItems
+task[install][] = Stanford\JumpstartEngineering\Install\Menu\JSEMenuPositionRules
 task[install][] = Stanford\Utility\Install\ViewsFromDB
-task[install][] = Stanford\JumpstartAcademic\Install\Block\BlockSettings
-task[install][] = Stanford\JumpstartAcademic\Install\HomePageSettings
-task[install][] = Stanford\JumpstartAcademic\Install\GeneralSettings
 
 
 
