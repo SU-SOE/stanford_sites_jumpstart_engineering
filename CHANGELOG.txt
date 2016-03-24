@@ -1,6 +1,10 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
+Stanford Sites Jumpstart Engineering 7.x-5.x-dev  2016-03-24
+------------------------------------------------------------
+Re-architecting to use install tasks
+
 Stanford Sites Jumpstart Engineering 7.x-1.1+4-dev  2016-02-18
 ------------------------------------------------------------
 - SOE-604: update URL for Affiliates
