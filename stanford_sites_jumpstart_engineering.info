@@ -98,7 +98,7 @@ task[local][install][] = Environment\Local\Install\GeneralSettings
 task[sites][install][] = Environment\Sites\Install\GeneralSettings
 task[sites][install][] = Environment\Sites\Install\WebauthSettings
 task[sites][install][] = Stanford\Jumpstart\Install\User\SunetUser
-task[install][] = Stanford\JumpstartEngineering\Install\Users\WMDUsersRoles
+task[sites][install][] = Stanford\JumpstartEngineering\Install\Users\WMDUsersRoles
 
 ; ANCHORAGE
 task[anchorage][install][] = Environment\Anchorage\Install\S3FSFileSettings
