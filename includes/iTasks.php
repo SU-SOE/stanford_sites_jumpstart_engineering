@@ -33,6 +33,7 @@ function itasks_form_install_configure_form_alter(&$form, $form_state) {
   $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
   $tasks = $engine->getTasks();
 
+
   // Get rid of the default ones.
   unset($tasks["install"]);
   unset($tasks["update"]);
@@ -61,11 +62,8 @@ function itasks_form_install_configure_form_alter(&$form, $form_state) {
   // // Pre-populate the site name with the server name.
   $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
 
-  // This is not ready..
-  // $form = $engine->getTaskOptionsForm($form, $form_state);
-
-  // $form["#validate"][] = "itasks_install_form_install_configure_form_alter_validate";
-  // $form["#submit"][] = "itasks_install_form_install_configure_form_alter_submit";
+  // Allow each task to alter the form.
+  $engine->getConfigureFormFields($form, $form_state);
 
 }
 
@@ -75,11 +73,11 @@ function itasks_form_install_configure_form_alter(&$form, $form_state) {
  * @param  [type] &$form_state [description]
  * @return [type]              [description]
  */
-function itasks_form_install_configure_form_alter_validate($form, &$form_state) {
-  if (empty($form_state['values']['itasks']['tasks'])) {
-    return;
-  }
-  // Do something here.....
+function itasks_form_install_configure_form_alter_validate(&$form, &$form_state) {
+  itasks_includes();
+  $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
+  $engine->getConfigureFormValidate($form, $form_state);
+
 }
 
 /**
@@ -88,11 +86,16 @@ function itasks_form_install_configure_form_alter_validate($form, &$form_state) 
  * @param  [type] &$form_state [description]
  * @return [type]              [description]
  */
-function itasks_form_install_configure_form_alter_submit($form, &$form_state) {
-  // if (empty($form_state['values']['itasks']['tasks'])) {
-  //   return;
-  // }
-  // $form_state['build_info']['args'][0]['install_task_list'] = $form_state['values']['itasks']['tasks'];
+function itasks_form_install_configure_form_alter_submit(&$form, &$form_state) {
+
+  // Force the pass through of all the variables when installing through the UI.
+  if (isset($form_state["build_info"]["args"][0]["interactive"]) && $form_state["build_info"]["args"][0]["interactive"]) {
+    $form_state["build_info"]["args"][0]["forms"]["install_configure_form"] = $form_state["values"];
+  }
+
+  itasks_includes();
+  $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
+  $engine->getConfigureFormSubmit($form, $form_state);
 }
 
 /**
