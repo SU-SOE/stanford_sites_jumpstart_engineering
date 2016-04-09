@@ -234,36 +234,82 @@ class TaskEngine {
   // ---------------------------------------------------------------------------
 
   /**
-   * [getTaskOptionsForm description].
-   *
-   * @return [type] [description]
+   * Loops through each of the installation tasks and allows them to alter the
+   * configuration form
+   * @param  array  $form        [description]
+   * @param  [type] &$form_state [description]
+   * @return [type]              [description]
    */
-  public function getTaskOptionsForm($form = array(), &$form_state) {
-    $tasks = $this->getTasks('install');
+  public function getConfigureFormFields(&$form, &$form_state) {
+    $groups = $this->getTasks();
+    foreach ($groups as $groupName => $tasks) {
 
-    $form['itasks'] = array(
-      "#type" => "fieldset",
-      "#title" => t("Task Options"),
-      "#description" => t("Choose which tasks you would like enabled."),
-      "#collapsible" => TRUE,
-      "#collapsed" => FALSE,
-      "#tree" => TRUE,
-    );
+      if ($groupName !== "install") {
+         // Create a fieldgroup for each of the extras
+        $form[$groupName] = array(
+          '#type' => 'fieldset',
+          '#title' => $groupName,
+          '#weight' => 50,
+          '#collapsible' => TRUE,
+          '#collapsed' => FALSE,
+          '#states' => array(
+            'visible' => array(
+             ':input[name="itasks_extra_tasks"]' => array('value' => $groupName),
+            ),
+          )
+        );
+      }
 
-    $options = array();
-    foreach ($tasks as $machine => $task) {
-      $options[$machine] = $task->getDescription();
+      foreach ($tasks as $machineName => $task) {
+        $task->form($form, $form_state);
+      }
     }
+  }
 
-    $form['itasks']['tasks'] = array(
-      "#type" => "checkboxes",
-      "#options" => $options,
-      "#title" => t("Installation tasks"),
-      "#description" => t("Check off all the installation tasks you would like to perform"),
-      "#default_value" => isset($form_state['values']['itasks']['tasks']) ? $form_state['values']['itasks']['tasks'] : array(),
+  /**
+   * Loops through each of the installation tasks and allows them to alter the
+   * configuration form
+   * @param  array  $form        [description]
+   * @param  [type] &$form_state [description]
+   * @return [type]              [description]
+   */
+  public function getConfigureFormValidate(&$form, &$form_state) {
+    $extra = $this->getExtraTasksName();
+    $tasks = $this->getTasks('install');
+    $extras = $this->getTasks($extra);
+    $groups = array(
+      "install" => $tasks,
+      $extra => $extras,
     );
 
-    return $form;
+    foreach ($groups as $groupName => $tasks) {
+      foreach ($tasks as $machineName => $task) {
+        $task->validate($form, $form_state);
+      }
+    }
+  }
+
+/**
+   * Loops through each of the installation tasks and allows them to alter the
+   * configuration form
+   * @param  array  $form        [description]
+   * @param  [type] &$form_state [description]
+   * @return [type]              [description]
+   */
+  public function getConfigureFormSubmit(&$form, &$form_state) {
+    $extra = $this->getExtraTasksName();
+    $tasks = $this->getTasks('install');
+    $extras = $this->getTasks($extra);
+    $groups = array(
+      "install" => $tasks,
+      $extra => $extras,
+    );
+
+    foreach ($groups as $groupName => $tasks) {
+      foreach ($tasks as $machineName => $task) {
+        $task->submit($form, $form_state);
+      }
+    }
   }
 
 }
