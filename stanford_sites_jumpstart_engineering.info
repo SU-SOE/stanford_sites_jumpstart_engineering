@@ -44,7 +44,7 @@ task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir
 
 ; JUMPSTART INSTALL
 ; task[install][] = Stanford\Jumpstart\Install\Authentication
-task[install][] = Stanford\Jumpstart\Install\themeSettings
+task[install][] = Stanford\Jumpstart\Install\ThemeSettings
 task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures
 task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary
 task[install][] = Stanford\Jumpstart\Install\GeneralSettings
