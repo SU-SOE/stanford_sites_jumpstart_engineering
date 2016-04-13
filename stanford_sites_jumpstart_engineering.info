@@ -45,7 +45,6 @@ task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
 task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
 
 ; JUMPSTART ACADEMIC INSTALL
-; JUMPSTART ACADEMIC INSTALL
 task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicVocabularies
 task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicNodes
 task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicBeans
@@ -53,6 +52,7 @@ task[install][] = Stanford\JumpstartAcademic\Install\Block\BlockSettings
 task[install][] = Stanford\JumpstartAcademic\Install\GeneralSettings
 
 ; JUMPSTART ENGINEERING INSTALL
+task[install][] = Stanford\JumpstartEngineering\Install\EnableModules
 task[install][] = Stanford\JumpstartEngineering\Install\Content\ImportJSENodes
 task[install][] = Stanford\JumpstartEngineering\Install\Content\ImportJSEBeans
 ; ViewsToDB must run before menu settings.
@@ -133,8 +133,6 @@ dependencies[] = bean_uuid
 dependencies[] = better_formats
 dependencies[] = block
 dependencies[] = block_class
-dependencies[] = color
-dependencies[] = comment
 dependencies[] = content_access
 dependencies[] = context_accordion
 dependencies[] = context_http_header
@@ -219,10 +217,8 @@ dependencies[] = stanford_events_views
 dependencies[] = stanford_gallery
 dependencies[] = stanford_image
 dependencies[] = stanford_image_styles
-dependencies[] = stanford_jsa_roles
 dependencies[] = stanford_jsa_layouts
 dependencies[] = stanford_jse_layouts
-dependencies[] = stanford_jse_roles
 dependencies[] = stanford_jumpstart
 dependencies[] = stanford_jumpstart_academic
 dependencies[] = stanford_jumpstart_engineering
@@ -247,6 +243,16 @@ dependencies[] = stanford_private_page_administration
 dependencies[] = stanford_private_page_section
 dependencies[] = stanford_publication
 dependencies[] = stanford_publication_views_reference
+
+
+; These modules are dependant on items that happen in install tasks.
+; Dependencies listed here get installed before the tasks are run.
+; To get around this we can install this module with a task.
+;
+; Installed in Stanford\JumpstartEngineering\Install\EnableModules
+; dependencies[] = stanford_jsa_roles
+; dependencies[] = stanford_jse_roles
+
 
 ; Files.
 ; ------
