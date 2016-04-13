@@ -92,7 +92,7 @@ task[sites][install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir
 task[sites][install][] = Environment\Sites\Install\GeneralSettings
 task[sites][install][] = Environment\Sites\Install\WebauthSettings
 task[sites][install][] = Environment\Sites\Install\WebauthExtras
-task[sites][install][] = Environment\Sites\Install\User\SunetUser
+task[sites][install][] = Stanford\JumpstartEngineering\Install\Sites\WMDUsersRoles
 
 ; ANCHORAGE
 task[anchorage][install][] = Environment\Anchorage\Install\S3FSFileSettings
