@@ -196,7 +196,7 @@ dependencies[] = views
 dependencies[] = views_ui
 dependencies[] = wysiwyg
 
-# Stanford Stuff
+; Stanford Stuff
 dependencies[] = capx_auto_nodetitle
 dependencies[] = stanford_affiliate_organization
 dependencies[] = stanford_affiliate_organization_administration
