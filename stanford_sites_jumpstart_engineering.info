@@ -70,6 +70,7 @@ task[install][] = Stanford\JumpstartEngineering\Install\Users\UserOne
 task[install][] = Stanford\JumpstartEngineering\Install\CAPx\CAPxDisplay
 task[install][] = Stanford\JumpstartEngineering\Install\Layouts\PicalPeople
 task[install][] = Stanford\Utility\Install\ViewsFromDB
+task[install][] = Stanford\JumpstartEngineering\Install\StanfordPersonDefaultImage
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
@@ -146,6 +147,7 @@ dependencies[] = ctools
 dependencies[] = date
 dependencies[] = date_api
 dependencies[] = dblog
+dependencies[] = default_image_ft
 dependencies[] = diff
 dependencies[] = email
 dependencies[] = entity
