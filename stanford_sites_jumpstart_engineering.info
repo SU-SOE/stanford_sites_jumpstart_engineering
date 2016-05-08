@@ -77,6 +77,9 @@ task[install][] = Stanford\JumpstartEngineering\Install\StanfordPersonDefaultIma
 task[install][] = Stanford\JumpstartEngineering\Install\LaunchChecklistPage
 task[install][] = Stanford\JumpstartEngineering\Install\GetHelpPage
 
+; This Jumpstart tasks needs to be after the content has been downloaded
+taskinstall[][] = Stanford\Jumpstart\Install\Content\FourOFour
+
 ; Needs to be last because of raisons.
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
 
