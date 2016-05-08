@@ -12,6 +12,8 @@ taskdir = sites/all/libraries/tasks
 ; Install Tasks                          Install in the order they appear below.
 ; ------------------------------------------------------------------------------
 
+task[install][] = Environment\Local\Install\LocalJSAContent
+
 ; STANDARD INSTALL
 task[install][] = Drupal\Standard\Install\FilteredHTMLFormat
 task[install][] = Drupal\Standard\Install\FullHTMLFormat
@@ -50,6 +52,7 @@ task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicNod
 task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicBeans
 task[install][] = Stanford\JumpstartAcademic\Install\Block\BlockSettings
 task[install][] = Stanford\JumpstartAcademic\Install\GeneralSettings
+task[install][] = Stanford\JumpstartAcademic\Install\AddFeaturesPage
 
 ; JUMPSTART ENGINEERING INSTALL
 task[install][] = Stanford\JumpstartEngineering\Install\EnableModules
@@ -71,6 +74,8 @@ task[install][] = Stanford\JumpstartEngineering\Install\CAPx\CAPxDisplay
 task[install][] = Stanford\JumpstartEngineering\Install\Layouts\PicalPeople
 task[install][] = Stanford\Utility\Install\ViewsFromDB
 task[install][] = Stanford\JumpstartEngineering\Install\StanfordPersonDefaultImage
+task[install][] = Stanford\JumpstartEngineering\Install\LaunchChecklistPage
+task[install][] = Stanford\JumpstartEngineering\Install\GetHelpPage
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
