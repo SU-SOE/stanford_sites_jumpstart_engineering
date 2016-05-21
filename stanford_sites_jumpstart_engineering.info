@@ -26,6 +26,7 @@ dependencies[] = stanford_affiliate_organization
 dependencies[] = stanford_affiliate_organization_administration
 dependencies[] = stanford_affiliate_organization_views
 dependencies[] = stanford_capx
+dependencies[] = stanford_feeds_helper
 dependencies[] = stanford_jumpstart_engineering
 dependencies[] = stanford_jse_layouts
 dependencies[] = stanford_jse_roles
