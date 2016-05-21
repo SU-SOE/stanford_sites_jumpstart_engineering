@@ -29,6 +29,7 @@ dependencies[] = stanford_capx
 dependencies[] = stanford_jumpstart_engineering
 dependencies[] = stanford_jse_layouts
 dependencies[] = stanford_jse_roles
+dependencies[] = stanford_news_administration
 dependencies[] = stanford_news_extras
 dependencies[] = stanford_news_extras_importer
 dependencies[] = stanford_private_page
