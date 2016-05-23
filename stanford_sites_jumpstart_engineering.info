@@ -18,6 +18,7 @@ dependencies[] = always_visible
 dependencies[] = menu_attributes
 dependencies[] = content_access
 dependencies[] = contextual_view_modes
+dependencies[] = default_image_ft
 
 # Stanford Stuff
 dependencies[] = stanford_private_page
