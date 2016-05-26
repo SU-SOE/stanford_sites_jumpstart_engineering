@@ -53,6 +53,7 @@ prohibit[] = stanford_courses
 prohibit[] = stanford_courses_administration
 prohibit[] = stanford_courses_person_reference
 prohibit[] = stanford_courses_person_reference_views
+prohibit[] = stanford_news_views
 
 # prohibit[] = comment
 
