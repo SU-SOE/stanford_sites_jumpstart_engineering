@@ -36,6 +36,7 @@ dependencies[] = stanford_news_extras_importer
 dependencies[] = stanford_private_page
 dependencies[] = stanford_private_page_administration
 dependencies[] = stanford_private_page_section
+dependencies[] = stanford_soe_helper
 
 # Stuff we may want later...
 ;dependencies[] = stanford_related_events
