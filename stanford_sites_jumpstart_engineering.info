@@ -36,6 +36,7 @@ dependencies[] = stanford_news_extras_importer
 dependencies[] = stanford_private_page
 dependencies[] = stanford_private_page_administration
 dependencies[] = stanford_private_page_section
+dependencies[] = stanford_soe_helper
 
 # Stuff we may want later...
 ;dependencies[] = stanford_related_events
@@ -52,6 +53,7 @@ prohibit[] = stanford_courses
 prohibit[] = stanford_courses_administration
 prohibit[] = stanford_courses_person_reference
 prohibit[] = stanford_courses_person_reference_views
+prohibit[] = stanford_news_views
 
 # prohibit[] = comment
 
