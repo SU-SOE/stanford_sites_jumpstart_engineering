@@ -12,7 +12,7 @@ taskdir = sites/all/libraries/tasks
 ; Install Tasks                          Install in the order they appear below.
 ; ------------------------------------------------------------------------------
 
-task[install][] = Environment\Local\Install\LocalJSAContent
+;task[install][] = Environment\Local\Install\LocalJSAContent
 
 ; STANDARD INSTALL
 task[install][] = Drupal\Standard\Install\FilteredHTMLFormat
