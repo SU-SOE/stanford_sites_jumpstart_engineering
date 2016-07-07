@@ -255,7 +255,6 @@ dependencies[] = stanford_private_page_administration
 dependencies[] = stanford_private_page_section
 dependencies[] = stanford_publication
 dependencies[] = stanford_publication_views_reference
-dependencies[] = stanford_soe_helper
 
 prohibit[] = stanford_news_views
 
