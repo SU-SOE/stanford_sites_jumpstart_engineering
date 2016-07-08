@@ -1,6 +1,17 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
+
+Stanford Sites Jumpstart Engineering 7.x-5.0  2016-06-08
+------------------------------------------------------------
+- SOE-686: Added default_image_ft
+- SOE-686: added news_extras dependicies and alphabetized
+- SOE-686: added news_admimistration
+- SOE-796: added dependency on stanford_feeds_helper
+- Added stanford_soe_helper dependency
+- SOE-686: prohibit[] = stanford_news_views
+
+
 Stanford Sites Jumpstart Engineering 7.x-5.x-dev  2016-03-24
 ------------------------------------------------------------
 Re-architecting to use install tasks
