@@ -208,6 +208,7 @@ dependencies[] = wysiwyg
 
 ; Stanford Stuff
 dependencies[] = capx_auto_nodetitle
+dependencies[] = nobots
 dependencies[] = stanford_affiliate_organization
 dependencies[] = stanford_affiliate_organization_administration
 dependencies[] = stanford_affiliate_organization_views
@@ -240,7 +241,6 @@ dependencies[] = stanford_jumpstart_wysiwyg
 dependencies[] = stanford_landing_page
 dependencies[] = stanford_landing_page_node_convert
 dependencies[] = stanford_manage_content
-dependencies[] = stanford_metatag_nobots
 dependencies[] = stanford_news
 dependencies[] = stanford_news_administration
 dependencies[] = stanford_news_views
