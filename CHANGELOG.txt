@@ -1,6 +1,9 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
+Stanford Sites Jumpstart Engineering 7.x-5.0+3-dev 2016-07-19
+------------------------------------------------------------
+- SOE-1041: Replace stanford_metatag_nobots with nobots
 
 Stanford Sites Jumpstart Engineering 7.x-5.0  2016-06-08
 ------------------------------------------------------------
