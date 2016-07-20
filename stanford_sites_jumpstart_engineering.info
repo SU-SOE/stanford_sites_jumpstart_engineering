@@ -124,6 +124,7 @@ task[local][install][] = Environment\Local\Install\ImageAllowInsecureDerivatives
 dependencies[] = itasks_update
 
 ; task[update][7001][] = Stanford\JumpstartEngineering\Update\TaskName
+task[update][7001][] = Stanford\JumpstartEngineering\Update\AddFeaturesPage
 
 ; Dependencies
 ; ------------------------------------------------------------------------------
