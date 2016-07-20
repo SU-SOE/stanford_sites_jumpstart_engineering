@@ -102,6 +102,7 @@ task[sites][install][] = Environment\Sites\Install\GeneralSettings
 task[sites][install][] = Environment\Sites\Install\WebauthSettings
 task[sites][install][] = Environment\Sites\Install\WebauthExtras
 task[sites][install][] = Stanford\JumpstartEngineering\Install\Sites\WMDUsersRoles
+;task[sites][install][] = Stanford\JumpstartEngineering\Install\AddFeaturesPage
 
 ; ANCHORAGE
 task[anchorage][install][] = Environment\Anchorage\Install\S3FSFileSettings
@@ -125,6 +126,7 @@ dependencies[] = itasks_update
 
 ; task[update][7001][] = Stanford\JumpstartEngineering\Update\TaskName
 task[update][7001][] = Stanford\JumpstartEngineering\Update\AddFeaturesPage
+task[update][7002] = Stanford\JumpstartEngineering\Update\AddFeaturesPage
 
 ; Dependencies
 ; ------------------------------------------------------------------------------
