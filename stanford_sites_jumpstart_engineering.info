@@ -52,7 +52,6 @@ task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicNod
 task[install][] = Stanford\JumpstartAcademic\Install\Content\ImportJSAcademicBeans
 task[install][] = Stanford\JumpstartAcademic\Install\Block\BlockSettings
 task[install][] = Stanford\JumpstartAcademic\Install\GeneralSettings
-task[install][] = Stanford\JumpstartAcademic\Install\AddFeaturesPage
 
 ; JUMPSTART ENGINEERING INSTALL
 task[install][] = Stanford\JumpstartEngineering\Install\EnableModules
@@ -76,6 +75,7 @@ task[install][] = Stanford\Utility\Install\ViewsFromDB
 task[install][] = Stanford\JumpstartEngineering\Install\StanfordPersonDefaultImage
 task[install][] = Stanford\JumpstartEngineering\Install\LaunchChecklistPage
 task[install][] = Stanford\JumpstartEngineering\Install\GetHelpPage
+task[install][] = Stanford\JumpstartEngineering\Install\AddFeaturesPage
 
 ; This Jumpstart tasks needs to be after the content has been downloaded
 task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
@@ -123,7 +123,8 @@ task[local][install][] = Environment\Local\Install\ImageAllowInsecureDerivatives
 
 dependencies[] = itasks_update
 
-; task[update][7001][] = Stanford\JumpstartEngineering\Update\TaskName
+; task[update][7001] = Stanford\JumpstartEngineering\Update\TaskName
+task[update][7001] = Stanford\JumpstartEngineering\Update\AddFeaturesPage
 
 ; Dependencies
 ; ------------------------------------------------------------------------------
