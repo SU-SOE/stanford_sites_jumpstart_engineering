@@ -204,6 +204,7 @@ dependencies[] = transliteration
 dependencies[] = uuid
 dependencies[] = uuid_path
 dependencies[] = uuid_services
+dependencies[] = view_unpublished
 dependencies[] = views
 dependencies[] = views_ui
 dependencies[] = wysiwyg
