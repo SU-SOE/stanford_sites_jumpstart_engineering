@@ -229,6 +229,7 @@ dependencies[] = stanford_events_views
 dependencies[] = stanford_gallery
 dependencies[] = stanford_image
 dependencies[] = stanford_image_styles
+dependencies[] = stanford_help
 dependencies[] = stanford_jsa_layouts
 dependencies[] = stanford_jse_layouts
 dependencies[] = stanford_jumpstart
