@@ -69,6 +69,7 @@ task[install][] = Stanford\JumpstartEngineering\Install\Layouts\Sitewide
 task[install][] = Stanford\JumpstartEngineering\Install\Block\JSEBlockClasses
 task[install][] = Stanford\JumpstartEngineering\Install\Block\JSEContextualBlockClasses
 task[install][] = Stanford\JumpstartEngineering\Install\Users\UserOne
+task[install][] = Stanford\JumpstartEngineering\Install\Users\RichardUser
 task[install][] = Stanford\JumpstartEngineering\Install\CAPx\CAPxDisplay
 task[install][] = Stanford\JumpstartEngineering\Install\Layouts\PicalPeople
 task[install][] = Stanford\Utility\Install\ViewsFromDB
