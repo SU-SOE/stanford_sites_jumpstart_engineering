@@ -62,6 +62,7 @@ task[install][] = Stanford\Utility\Install\ViewsToDB
 task[install][] = Stanford\JumpstartEngineering\Install\Menu\JSEMenuItems
 task[install][] = Stanford\JumpstartEngineering\Install\Menu\JSEMenuPositionRules
 task[install][] = Stanford\JumpstartEngineering\Install\Menu\JSEPrivateMenuItems
+task[install][] = Stanford\JumpstartEngineering\Install\Menu\JSEAdminShortcutMenuItems
 task[install][] = Stanford\JumpstartEngineering\Install\Menu\JSEMenuRedirects
 task[install][] = Stanford\JumpstartEngineering\Install\CAPx\CAPxConfig
 task[install][] = Stanford\JumpstartEngineering\Install\Layouts\PicalHomepage
