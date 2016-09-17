@@ -4,7 +4,7 @@ description = "Select this profile to install the Stanford Sites Jumpstart Engin
 project = stanford_sites_jumpstart_engineering
 project status url = https://github.com/SU-SOE/stanford_sites_jumpstart_engineering
 core = 7.x
-version = 7.x-5.0+20-dev
+version = 7.x-5.0-dev
 
 ; ITasks Config
 taskdir = sites/all/libraries/tasks
