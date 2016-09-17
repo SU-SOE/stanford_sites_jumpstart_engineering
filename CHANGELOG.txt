@@ -1,6 +1,19 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
+Stanford Sites Jumpstart Engineering 7.x-5.0+20-dev 2016-09-16
+------------------------------------------------------------
+- Installation Tasks added:
+  - Add example user Richard
+  - Add JSE specific items to the admin shortcuts menu (site actions)
+  - Add Features page
+- Modules added:
+  - Site specific help (Stanford Help)
+  - View unpublished
+- Update tasks
+  - Add Features Page
+
+
 Stanford Sites Jumpstart Engineering 7.x-5.0+3-dev 2016-07-19
 ------------------------------------------------------------
 - SOE-1041: Replace stanford_metatag_nobots with nobots
