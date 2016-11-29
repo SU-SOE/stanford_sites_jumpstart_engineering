@@ -1,7 +1,12 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
-Stanford Sites Jumpstart Engineering 7.x-5.0+20-dev 2016-09-16
+Stanford Sites Jumpstart Engineering 7.x-5.1+4-dev 2016-11-29
+------------------------------------------------------------
+- Changed class paths and loader
+
+
+Stanford Sites Jumpstart Engineering 7.x-5.1 2016-09-16
 ------------------------------------------------------------
 - Installation Tasks added:
   - Add example user Richard
