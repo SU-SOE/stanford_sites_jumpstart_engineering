@@ -1,6 +1,12 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
+Stanford Sites Jumpstart Engineering 7.x-5.1+7-dev 2016-11-29
+------------------------------------------------------------
+- Removed dependency on rest_server
+- Replaced stanford_news_views with stanford_news_extras_views
+
+
 Stanford Sites Jumpstart Engineering 7.x-5.1+4-dev 2016-11-29
 ------------------------------------------------------------
 - Changed class paths and loader
