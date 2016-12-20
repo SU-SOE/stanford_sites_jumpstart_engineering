@@ -78,6 +78,7 @@ task[install][] = Stanford\JumpstartEngineering\Install\StanfordPersonDefaultIma
 task[install][] = Stanford\JumpstartEngineering\Install\LaunchChecklistPage
 task[install][] = Stanford\JumpstartEngineering\Install\GetHelpPage
 task[install][] = Stanford\JumpstartEngineering\Install\AddFeaturesPage
+task[install][] = Stanford\Utility\Install\NodeAccessRebuild
 
 ; This Jumpstart tasks needs to be after the content has been downloaded
 task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
