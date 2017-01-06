@@ -259,7 +259,7 @@ dependencies[] = stanford_private_page_administration
 dependencies[] = stanford_private_page_section
 dependencies[] = stanford_publication
 dependencies[] = stanford_publication_views_reference
-
+dependencies[] = stanford_alt_check
 
 ; These modules are dependant on items that happen in install tasks.
 ; Dependencies listed here get installed before the tasks are run.
