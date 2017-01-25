@@ -1,6 +1,11 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
+Stanford Sites Jumpstart Engineering 7.x-5.2 2017-01-25
+------------------------------------------------------------
+- Added NodeAccessRebuild task to installation
+- Added dependency on alt check module
+
 Stanford Sites Jumpstart Engineering 7.x-5.1+7-dev 2016-12-14
 ------------------------------------------------------------
 - Removed dependency on rest_server

@@ -4,7 +4,7 @@ description = "Select this profile to install the Stanford Sites Jumpstart Engin
 project = stanford_sites_jumpstart_engineering
 project status url = https://github.com/SU-SOE/stanford_sites_jumpstart_engineering
 core = 7.x
-version = 7.x-5.1-dev
+version = 7.x-5.2
 
 ; ITasks Config
 taskdir = sites/all/libraries/tasks
@@ -216,6 +216,7 @@ dependencies[] = nobots
 dependencies[] = stanford_affiliate_organization
 dependencies[] = stanford_affiliate_organization_administration
 dependencies[] = stanford_affiliate_organization_views
+dependencies[] = stanford_alt_check
 dependencies[] = stanford_bean_types
 dependencies[] = stanford_bean_types_permissions
 dependencies[] = stanford_capx
@@ -261,7 +262,6 @@ dependencies[] = stanford_private_page_administration
 dependencies[] = stanford_private_page_section
 dependencies[] = stanford_publication
 dependencies[] = stanford_publication_views_reference
-dependencies[] = stanford_alt_check
 
 ; These modules are dependant on items that happen in install tasks.
 ; Dependencies listed here get installed before the tasks are run.

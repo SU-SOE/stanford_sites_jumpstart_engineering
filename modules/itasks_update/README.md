@@ -1,5 +1,5 @@
 #[Stanford Module](https://github.com/SU-SWS/stanford_module)
-##### Version: 7.x-5.1+4-dev  
+##### Version: 7.x-5.2 
 
 Maintainers: [jbickar](https://github.com/jbickar), [sherakama](https://github.com/sherakama)
 [Changelog.txt](CHANGELOG.txt)
