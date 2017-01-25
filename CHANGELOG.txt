@@ -1,6 +1,10 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
+Stanford Sites Jumpstart Engineering 7.x-5.2+2-dev 2017-01-25
+------------------------------------------------------------
+- Added VersionIdentifier install task
+
 Stanford Sites Jumpstart Engineering 7.x-5.2 2017-01-25
 ------------------------------------------------------------
 - Added NodeAccessRebuild task to installation
