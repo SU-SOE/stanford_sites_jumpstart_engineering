@@ -1,6 +1,11 @@
 # Stanford Sites Jumpstart Engineering
 ----------------------------------------
 
+Stanford Sites Jumpstart Engineering 7.x-5.3+7-dev 2017-03-21
+------------------------------------------------------------
+- Removed dependency on services module
+- Added dependency on stanford_gallery_administration and stanford_gallery_block
+
 Stanford Sites Jumpstart Engineering 7.x-5.2+2-dev 2017-01-25
 ------------------------------------------------------------
 - Added VersionIdentifier install task
