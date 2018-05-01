@@ -7,7 +7,7 @@ core = 7.x
 version = 7.x-5.3+7-dev
 
 ; ITasks Config
-taskdir = sites/all/libraries/tasks
+taskdir = sites/all/libraries/stanford_install_tasks
 
 ; Install Tasks                          Install in the order they appear below.
 ; ------------------------------------------------------------------------------
