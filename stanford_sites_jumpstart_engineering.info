@@ -113,6 +113,8 @@ task[anchorage][install][] = Environment\Anchorage\Install\SAMLSettings
 ; LOCAL
 task[local][install][] = Environment\Local\Install\ImageAllowInsecureDerivatives
 
+; ACSF
+task[acsf][install][] = Environment\ACSF\Install\EnableModules
 
 ; Update Tasks
 ; ------------------------------------------------------------------------------
