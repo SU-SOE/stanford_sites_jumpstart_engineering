@@ -476,7 +476,7 @@
     "su-sws/stanford_related_content": "~7.1@alpha",
     "su-sws/stanford_slides": "~7.3",
     "su-sws/stanford_wysiwyg": "~7.2",
-    "su-soe/stanford_jumpstart_engineering": "dev-7.x-5.x",
+    "su-soe/stanford_jumpstart_engineering": "~7.5",
 
     "su-sws/open_framework": "~7.2",
     "su-sws/stanford_seven": "~7.1",
