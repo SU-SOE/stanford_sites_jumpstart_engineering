@@ -235,6 +235,10 @@
     },
     {
       "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_video"
+    },
+    {
+      "type": "vcs",
       "url": "https://github.com/SU-SWS/stanford_easy_wysiwyg_css"
     },
     {
@@ -475,6 +479,7 @@
     "su-sws/stanford_publication": "~7.2",
     "su-sws/stanford_related_content": "~7.1@alpha",
     "su-sws/stanford_slides": "~7.3",
+    "su-sws/stanford_video": "~7.2.0",
     "su-sws/stanford_wysiwyg": "~7.2",
     "su-soe/stanford_jumpstart_engineering": "~7.6",
 
