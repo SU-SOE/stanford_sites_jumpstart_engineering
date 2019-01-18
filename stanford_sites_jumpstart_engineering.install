@@ -25,3 +25,28 @@ function stanford_sites_jumpstart_engineering_requirements($phase) {
   $requirements = array();
   return $requirements;
 }
+
+/**
+ * Set the help page text that goes missing in 6.x on upgrade.
+ */
+function stanford_sites_jumpstart_engineering_update_7600() {
+
+  $modules = ['itasks_update'];
+  module_disable($modules);
+  drupal_uninstall_modules($modules);
+
+  // Load up the itasks installer and re-use the code from that.
+  include_once dirname(__FILE__) . "/includes/iTasks.php";
+  itasks_autoload_library();
+
+  // Create a new Task Engine and fetch all of the available tasks.
+  $state = [];
+  $info = drupal_parse_info_file(dirname(__FILE__) . "/stanford_sites_jumpstart_engineering.info");
+  $engine = new \ITasks\TaskEngine($info, $state);
+  $tasks = $engine->getTasks("install");
+
+  // Run the three help page tasks.
+  $tasks['StanfordJumpstartEngineeringInstallGetHelpPage']->execute();
+  $tasks['StanfordJumpstartEngineeringInstallLaunchChecklistPage']->execute();
+  $tasks['StanfordJumpstartEngineeringInstallAddFeaturesPage']->execute();
+}
