@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file
+ * Install tasks.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function stanford_jumpstart_requirements($phase) {
+
+  $requirements = array();
+  switch ($phase) {
+    case 'runtime':
+      $info = system_get_info('module', variable_get('install_profile'));
+      $requirements = array(
+        'stanford_jumpstart' => array(
+          'title' => t('Stanford Jumpstart'),
+          'severity' => REQUIREMENT_OK,
+          'value' => t('!name: %version', array(
+            '!name' => $info['name'],
+            '%version' => $info['version'],
+          )),
+        ),
+      );
+      break;
+  }
+  return $requirements;
+}
+
+/**
+ * If there are already settings for the help page update the array with.
+ *
+ * Any new settings my merging them into the already defined options.
+ */
+function stanford_jumpstart_update_7401() {
+
+  $db = variable_get('stanford_jumpstart_help_settings');
+
+  if (!empty($db)) {
+    variable_del('stanford_jumpstart_help_settings');
+    $defaults = stanford_jumpstart_help_get_settings();
+    $new_settings = array_merge($defaults, $db);
+    variable_set('stanford_jumpstart_help_settings', $new_settings);
+  }
+
+}
+
+/**
+ * Add permission for administrator role to administrate jumpstart help.
+ */
+function stanford_jumpstart_update_7402() {
+  $role = user_role_load_by_name("administrator");
+  if ($role) {
+    user_role_grant_permissions($role->rid, array("administer jumpstart help"));
+  }
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_jumpstart_uninstall() {
+  variable_del('stanford_jumpstart_help_settings');
+}

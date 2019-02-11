@@ -5,7 +5,7 @@
  *  @author Caryl Westerberg <cjwest@stanford.edu>
  */
 $context = new stdClass();
-$context->disabled = FALSE; /* Edit this to true to make a default context disabled initially */
+$context->disabled = TRUE; /* Edit this to true to make a default context disabled initially */
 $context->api_version = 3;
 $context->name = 'stanford_jumpstart_home_pettit';
 $context->description = 'Homepage: Pettit layout with full-width banner, news, events, and a large custom block';

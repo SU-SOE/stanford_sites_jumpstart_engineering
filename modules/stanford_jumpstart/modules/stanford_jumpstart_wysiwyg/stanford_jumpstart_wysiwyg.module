@@ -1,0 +1,35 @@
+<?php
+/**
+ * @file
+ * Stanford Jumpstart WYSIWYG functionality.
+ */
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_jumpstart_wysiwyg_form_wysiwyg_profile_form_alter(&$form, &$form_state, $form_id) {
+  $form['css']['css_path']['#maxlength'] = 1024;
+  $form['css']['css_path']['#size'] = 120;
+}
+
+/**
+ * Implements hook_wysiwyg_editor_settings_alter().
+ */
+function stanford_jumpstart_wysiwyg_wysiwyg_editor_settings_alter(&$settings, $context) {
+  // Add editor CSS to fix overflow issue.
+  $editor_css = url(drupal_get_path('module', 'stanford_jumpstart_wysiwyg') . '/css/editor.css');
+  $settings['contentsCss'][] = $editor_css;
+
+  if ($context['profile']->format == "content_editor_text_format") {
+    $settings['stylesSet'][] = array(
+      'name' => t('Breakout Box Dark'),
+      'element' => 'p',
+      'attributes' => array(
+        'class' => 'pullquote',
+      ),
+    );
+
+    // Keys need to be in order for some reason.
+    sort($settings['stylesSet']);
+  }
+}
